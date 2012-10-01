@@ -10,7 +10,6 @@ public class LogInActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.log_in);
-		// COMMENT
 	}
 
 	@Override
