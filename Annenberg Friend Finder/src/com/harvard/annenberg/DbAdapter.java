@@ -22,18 +22,20 @@ public class DbAdapter {
 	public static final int KEY_USER_LNAME_NUM = 2;
 	public static final String KEY_USER_HUID = "huid";
 	public static final int KEY_USER_HUID_NUM = 3;
+	public static final String KEY_PASSWORD = "password";
+	public static final int KEY_PASSWORD_NUM = 4;
 	public static final String KEY_SERVER_ID = "server_id";
-	public static final int KEY_SERVER_ID_NUM = 4;
+	public static final int KEY_SERVER_ID_NUM = 5;
 	public static final String FLAG_1 = "flag1";
-	public static final int KEY_FLAG_1 = 5;
+	public static final int KEY_FLAG_1 = 6;
 	public static final String FLAG_2 = "flag2";
-	public static final int KEY_FLAG_2 = 6;
+	public static final int KEY_FLAG_2 = 7;
 	public static final String FLAG_3 = "flag3";
-	public static final int KEY_FLAG_3 = 7;
+	public static final int KEY_FLAG_3 = 8;
 	public static final String FLAG_4 = "flag4";
-	public static final int KEY_FLAG_4 = 8;
+	public static final int KEY_FLAG_4 = 9;
 	public static final String FLAG_5 = "flag5";
-	public static final int KEY_FLAG_5 = 9;
+	public static final int KEY_FLAG_5 = 10;
 
 	private static final String DATABASE_NAME = "user";
 	private static final int DATABASE_VERSION = 1;
@@ -57,7 +59,8 @@ public class DbAdapter {
 			+ " integer primary key autoincrement, " + KEY_USER_NAME
 			+ " text default 'Unknown', " + KEY_USER_IMAGE
 			+ " text default 'Unknown', " + KEY_USER_HUID
-			+ " integer default '0', " + KEY_SERVER_ID + " long, " + FLAG_1
+			+ " integer default '0', " + KEY_SERVER_ID + " long, "
+			+ KEY_PASSWORD + "text default 'Unknown', " + FLAG_1
 			+ " text default 'Unknown', " + FLAG_2
 			+ " text default 'Unknown', " + FLAG_3
 			+ " text default 'Unknown', " + FLAG_4
@@ -116,7 +119,8 @@ public class DbAdapter {
 		}
 	}
 
-	public int createContact(String name, String imageUri, int HUID) {
+	public int createContact(String name, String imageUri, int HUID,
+			String password) {
 
 		open(true);
 		String image = "";
@@ -128,11 +132,12 @@ public class DbAdapter {
 		vals.put(KEY_USER_NAME, name.trim());
 		vals.put(KEY_USER_IMAGE, image.trim());
 		vals.put(KEY_USER_HUID, HUID);
+		vals.put(KEY_PASSWORD, password);
 		return (int) mDb.insert(USER_DB_TABLE, null, vals);
 	}
 
 	public int updateContact(int id, String name, String imageUri, int HUID,
-			long serverId) {
+			String password, long serverId) {
 		open(true);
 
 		String image = "";
@@ -145,17 +150,16 @@ public class DbAdapter {
 		vals.put(KEY_USER_IMAGE, image.trim());
 		vals.put(KEY_USER_HUID, HUID);
 		vals.put(KEY_SERVER_ID, serverId);
-
-		return mDb.update(USER_DB_TABLE, vals, KEY_USER_ID + "=" + id,
-				null);
+		vals.put(KEY_PASSWORD, password);
+		return mDb.update(USER_DB_TABLE, vals, KEY_USER_ID + "=" + id, null);
 
 	}
 
 	public Cursor fetchUser(int id) throws SQLException {
 		boolean found = false;
 		open(true);
-		Cursor mCursor = mDb.query(true,USER_DB_TABLE, null,
-				KEY_USER_ID + "=" + id, null, null, null, null, null);
+		Cursor mCursor = mDb.query(true, USER_DB_TABLE, null, KEY_USER_ID + "="
+				+ id, null, null, null, null, null);
 		if (mCursor != null) {
 			found = mCursor.moveToFirst();
 		}
@@ -193,8 +197,8 @@ public class DbAdapter {
 	public Cursor fetchAllUsers() {
 		boolean found = false;
 		open(true);
-		Cursor mCursor = mDb.query(USER_DB_TABLE, null, null, null, null,
-				null, null);
+		Cursor mCursor = mDb.query(USER_DB_TABLE, null, null, null, null, null,
+				null);
 
 		if (mCursor != null) {
 			found = mCursor.moveToFirst();
@@ -213,7 +217,7 @@ public class DbAdapter {
 
 		ContentValues vals = new ContentValues();
 		vals.put(KEY_SERVER_ID, server_id);
-		return mDb.update(USER_DB_TABLE, vals, KEY_USER_ID + "="
-				+ contactId, null);
+		return mDb.update(USER_DB_TABLE, vals, KEY_USER_ID + "=" + contactId,
+				null);
 	}
 }
