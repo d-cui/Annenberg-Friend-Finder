@@ -119,7 +119,7 @@ public class DbAdapter {
 		}
 	}
 
-	public int createContact(String name, String imageUri, int HUID,
+	public int createUser(String name, String imageUri, int HUID,
 			String password) {
 
 		open(true);
@@ -136,12 +136,12 @@ public class DbAdapter {
 		return (int) mDb.insert(USER_DB_TABLE, null, vals);
 	}
 
-	public int updateContact(int id, String name, String imageUri, int HUID,
+	public int updateUser(int id, String name, String imageUri, int HUID,
 			String password, long serverId) {
 		open(true);
 
 		String image = "";
-		if (!imageUri.equals(""))
+		if (imageUri != null && !imageUri.equals(""))
 			image = imageUri;
 
 		ContentValues vals = new ContentValues();
@@ -229,12 +229,12 @@ public class DbAdapter {
 		return mCursor;
 	}
 
-	public int updateServerId(int contactId, long server_id) {
+	public int updateServerId(int userId, long server_id) {
 		open(true);
 
 		ContentValues vals = new ContentValues();
 		vals.put(KEY_SERVER_ID, server_id);
-		return mDb.update(USER_DB_TABLE, vals, KEY_USER_ID + "=" + contactId,
+		return mDb.update(USER_DB_TABLE, vals, KEY_USER_ID + "=" + userId,
 				null);
 	}
 }

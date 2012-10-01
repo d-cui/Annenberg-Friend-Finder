@@ -30,9 +30,13 @@ public final class R {
     }
     public static final class layout {
         public static final int activity_log_in=0x7f030000;
-        public static final int log_in=0x7f030001;
-        public static final int sign_up=0x7f030002;
-        public static final int tab_host=0x7f030003;
+        public static final int all_list_layout=0x7f030001;
+        public static final int annenberg_layout=0x7f030002;
+        public static final int friends_list_layout=0x7f030003;
+        public static final int log_in=0x7f030004;
+        public static final int profile_layout=0x7f030005;
+        public static final int sign_up=0x7f030006;
+        public static final int tab_host=0x7f030007;
     }
     public static final class menu {
         public static final int activity_log_in=0x7f060000;
