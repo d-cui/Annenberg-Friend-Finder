@@ -172,6 +172,23 @@ public class DbAdapter {
 		return mCursor;
 	}
 
+	public Cursor fetchUserByHUID(int HUID) throws SQLException {
+		boolean found = false;
+		open(true);
+		Cursor mCursor = mDb.query(true, USER_DB_TABLE, null, KEY_USER_HUID
+				+ "=" + HUID, null, null, null, null, null);
+		if (mCursor != null) {
+			found = mCursor.moveToFirst();
+		}
+		if (!found) {
+			if (mCursor != null) {
+				mCursor.close();
+			}
+			return null;
+		}
+		return mCursor;
+	}
+
 	public Cursor fetchUser(long id) throws SQLException {
 		boolean found = false;
 		open(true);
