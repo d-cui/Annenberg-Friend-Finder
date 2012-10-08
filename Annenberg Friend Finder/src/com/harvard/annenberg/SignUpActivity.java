@@ -42,12 +42,12 @@ public class SignUpActivity extends Activity {
 						.parseInt(((EditText) findViewById(R.id.signup_HUID))
 								.getText().toString());
 				DbAdapter database = new DbAdapter(SignUpActivity.this);
-				if (database.fetchUserByHUID(HUID) == null) {
+				if (database.fetchUserByHUID(HUID) != null) {
 					showAlert("Error: That HUID is already registered");
 					return;
 				}
 				database.createUser(name, "", HUID, passwordConfirm);
-
+				database.close();
 				showAlertAndTransfer("Profile created");
 			}
 		});
