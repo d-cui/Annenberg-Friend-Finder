@@ -1,5 +1,7 @@
 package com.harvard.annenberg;
 
-public class EveryoneListActivity {
+import android.app.Activity;
+
+public class EveryoneListActivity extends Activity {
 
 }
