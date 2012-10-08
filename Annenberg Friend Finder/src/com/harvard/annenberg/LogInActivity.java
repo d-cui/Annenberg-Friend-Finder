@@ -51,7 +51,17 @@ public class LogInActivity extends Activity {
 				Intent i = new Intent(LogInActivity.this, ProfileActivity.class);
 				startActivity(i);
 				finish();
-				
+
+			}
+		});
+
+		Button signUpButton = (Button) findViewById(R.id.signup);
+		signUpButton.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				Intent i = new Intent(LogInActivity.this, SignUpActivity.class);
+				startActivity(i);
+				finish();
 			}
 		});
 	}
