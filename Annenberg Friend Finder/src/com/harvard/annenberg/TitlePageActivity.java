@@ -42,7 +42,7 @@ public class TitlePageActivity extends Activity {
 	private ImageView logStatus;
 	private boolean mIsLogin = false;
 
-	private String HUID;
+	private int HUID;
 	private String hash_code;
 
 	private int count = 0;
@@ -74,7 +74,7 @@ public class TitlePageActivity extends Activity {
 		TextView mBottomText = (TextView) findViewById(R.id.welcomeTitle);
 		if (mIsLogin) {
 			db.open(true);
-			Cursor mCursor = db.fetchUserByHUID(Integer.valueOf(HUID));
+			Cursor mCursor = db.fetchUserByHUID(HUID);
 			mBottomText.setText("Hi, "
 					+ mCursor.getString(mCursor
 							.getColumnIndexOrThrow(DbAdapter.KEY_USER_NAME))
@@ -89,6 +89,8 @@ public class TitlePageActivity extends Activity {
 		menu.setOnClickListener(menuListener);
 		ImageView schedule = (ImageView) findViewById(R.id.title_schedule);
 		schedule.setOnClickListener(scheduleListener);
+
+		masterRow = (LinearLayout) findViewById(R.id.master_row);
 		// Button recoverCards = (Button) findViewById(R.id.title_recovercards);
 		// recoverCards.setOnClickListener(recoverCardsListener);
 	}
@@ -180,7 +182,7 @@ public class TitlePageActivity extends Activity {
 	private void checkLogin() {
 		final SharedPreferences prefs = getSharedPreferences("AFF",
 				MODE_PRIVATE);
-		HUID = prefs.getString("HUID", null);
+		HUID = prefs.getInt("HUID", 0);
 		mIsLogin = prefs.getBoolean("login", false);
 	}
 
@@ -195,7 +197,7 @@ public class TitlePageActivity extends Activity {
 		TextView mBottomText = (TextView) findViewById(R.id.welcomeTitle);
 		if (mIsLogin) {
 			db.open(true);
-			Cursor mCursor = db.fetchUserByHUID(Integer.valueOf(HUID));
+			Cursor mCursor = db.fetchUserByHUID(HUID);
 			mBottomText.setText("Hi, "
 					+ mCursor.getString(mCursor
 							.getColumnIndexOrThrow(DbAdapter.KEY_USER_NAME))
@@ -218,7 +220,7 @@ public class TitlePageActivity extends Activity {
 			TextView mBottomText = (TextView) findViewById(R.id.welcomeTitle);
 			if (mIsLogin) {
 				db.open(true);
-				Cursor mCursor = db.fetchUserByHUID(Integer.valueOf(HUID));
+				Cursor mCursor = db.fetchUserByHUID(HUID);
 				mBottomText
 						.setText("Hi, "
 								+ mCursor.getString(mCursor
