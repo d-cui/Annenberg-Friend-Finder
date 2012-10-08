@@ -4,5 +4,11 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_log_in">LogInActivity</string>
+    
+    <string-array name="status_array">
+		<item>N/A</item>
+		<item>In Line</item>
+		<item>Eating</item>
+	</string-array>
 
 </resources>

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:gravity="center_horizontal"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -49,7 +50,9 @@
                 android:singleLine="true"
                 android:textColor="#FFFFFFFF" />
 
-            <TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
             </TextView>
         </LinearLayout>
     </LinearLayout>
@@ -58,25 +61,33 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/profile_in_annenberg"
+            android:id="@+id/profile_status_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dip"
             android:layout_marginRight="10dip"
             android:layout_marginTop="7dip"
             android:singleLine="true"
-            android:textColor="#FFFFFFFF"
+            android:text="Status:"
+            android:textColor="#FF000000"
             android:textSize="16sp"
             android:textStyle="bold" >
         </TextView>
 
-        <Checkbox
-            android:id="@+id/profile_annenberg_checkbox"
+        <Spinner
+            android:id="@+id/profile_status"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:prompt="Set Status" />
     </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
