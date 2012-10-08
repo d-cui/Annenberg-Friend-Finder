@@ -10,5 +10,7 @@
 		<item>In Line</item>
 		<item>Eating</item>
 	</string-array>
+	
+    <string name="set_status">Set Status</string>
 
 </resources>
