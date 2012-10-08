@@ -1,5 +1,7 @@
 package com.harvard.annenberg;
 
-public class FriendListActivity {
+import android.app.Activity;
+
+public class FriendListActivity extends Activity{
 
 }

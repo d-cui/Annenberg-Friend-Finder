@@ -42,7 +42,7 @@ public class FriendFinderTabHost extends TabActivity {
 
 		TabHost tabHost = getTabHost();
 
-		// Tab for breakfast
+		// Tab for profile
 		TabSpec profileSpec = tabHost.newTabSpec("Profile");
 		// setting Title and Icon for the Tab
 		profileSpec.setIndicator("Profile",
@@ -51,7 +51,7 @@ public class FriendFinderTabHost extends TabActivity {
 		profileIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		profileSpec.setContent(profileIntent);
 
-		// Tab for lunch
+		// Tab for friend list
 		TabSpec friendSpec = tabHost.newTabSpec("Friends");
 		friendSpec.setIndicator("Friends",
 				getResources().getDrawable(R.drawable.friends));
@@ -59,7 +59,7 @@ public class FriendFinderTabHost extends TabActivity {
 		friendIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		friendSpec.setContent(friendIntent);
 
-		// Tab for dinner
+		// Tab for everyone list
 		TabSpec everyoneSpec = tabHost.newTabSpec("Everyone");
 		everyoneSpec.setIndicator("Everyone",
 				getResources().getDrawable(R.drawable.everyone));
@@ -67,7 +67,7 @@ public class FriendFinderTabHost extends TabActivity {
 		everyoneIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		everyoneSpec.setContent(everyoneIntent);
 
-		// Tab for brunch
+		// Tab for annenberg
 		TabSpec annenbergSpec = tabHost.newTabSpec("Annenberg");
 		annenbergSpec.setIndicator("Annenberg",
 				getResources().getDrawable(R.drawable.annenberg));

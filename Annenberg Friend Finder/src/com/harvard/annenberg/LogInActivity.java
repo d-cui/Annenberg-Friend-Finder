@@ -51,7 +51,7 @@ public class LogInActivity extends Activity {
 				editor.putBoolean("login", true);
 				editor.putInt("HUID", HUID);
 				editor.commit();
-				Intent i = new Intent(LogInActivity.this, ProfileActivity.class);
+				Intent i = new Intent(LogInActivity.this, FriendFinderTabHost.class);
 				startActivity(i);
 				finish();
 
