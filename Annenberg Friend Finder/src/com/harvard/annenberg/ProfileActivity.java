@@ -10,7 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -40,7 +40,7 @@ public class ProfileActivity extends Activity {
 				.getColumnIndexOrThrow(DbAdapter.KEY_USER_HUID)));
 
 		// Image
-		//TODO: Gallery set image stuff.
+		// TODO: Gallery set image stuff.
 		String uriString = c.getString(c
 				.getColumnIndexOrThrow(DbAdapter.KEY_USER_IMAGE));
 		if (uriString.equals("") == false) {
@@ -55,9 +55,9 @@ public class ProfileActivity extends Activity {
 				R.array.status_array, android.R.layout.simple_spinner_item);
 		a.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		s.setAdapter(a);
-		s.setOnItemClickListener(new OnItemClickListener() {
+		s.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int pos,
 					long arg3) {
 				// TODO Server update
 				switch (pos) {
@@ -71,6 +71,11 @@ public class ProfileActivity extends Activity {
 					// Eating
 					break;
 				}
+
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
 
 			}
 		});
