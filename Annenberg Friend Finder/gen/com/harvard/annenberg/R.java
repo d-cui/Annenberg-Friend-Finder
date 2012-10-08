@@ -76,7 +76,7 @@ public final class R {
         public static final int chooseanimage=0x7f020003;
         /**  text color 
          */
-        public static final int class_zero_background=0x7f020013;
+        public static final int class_zero_background=0x7f020014;
         public static final int clock=0x7f020004;
         public static final int collapse=0x7f020005;
         public static final int dinner=0x7f020006;
@@ -86,20 +86,22 @@ public final class R {
         public static final int friends=0x7f02000a;
         public static final int ic_action_search=0x7f02000b;
         public static final int ic_launcher=0x7f02000c;
-        public static final int light_blue_background=0x7f020019;
+        public static final int light_blue_background=0x7f02001a;
         public static final int list_divider=0x7f02000d;
         public static final int login=0x7f02000e;
         public static final int logout=0x7f02000f;
         public static final int lunch=0x7f020010;
         public static final int menu=0x7f020011;
-        public static final int profile=0x7f020012;
-        public static final int text_color=0x7f020014;
-        public static final int text_color_black=0x7f020016;
-        public static final int text_color_offwhite=0x7f020017;
-        public static final int text_color_red=0x7f020015;
-        public static final int white_background=0x7f020018;
+        public static final int plus50x50=0x7f020012;
+        public static final int profile=0x7f020013;
+        public static final int text_color=0x7f020015;
+        public static final int text_color_black=0x7f020017;
+        public static final int text_color_offwhite=0x7f020018;
+        public static final int text_color_red=0x7f020016;
+        public static final int white_background=0x7f020019;
     }
     public static final class id {
+<<<<<<< HEAD
         public static final int bottomTitleBar=0x7f090028;
         public static final int category=0x7f090001;
         public static final int check_in=0x7f090017;
@@ -148,6 +150,50 @@ public final class R {
         public static final int vegan=0x7f09001b;
         public static final int vegetarian=0x7f09001a;
         public static final int welcomeTitle=0x7f090029;
+=======
+        public static final int add_new_friend=0x7f090003;
+        public static final int allList=0x7f090000;
+        public static final int bottomTitleBar=0x7f090022;
+        public static final int category=0x7f090002;
+        public static final int check_in=0x7f090011;
+        public static final int indicator=0x7f090001;
+        public static final int ingredients=0x7f090019;
+        public static final int local=0x7f090017;
+        public static final int loginTitle=0x7f090005;
+        public static final int loginTitleBar=0x7f090004;
+        public static final int login_HUID=0x7f090006;
+        public static final int login_go=0x7f090008;
+        public static final int login_password=0x7f090007;
+        public static final int master_row=0x7f090025;
+        public static final int menu_settings=0x7f090029;
+        public static final int mollieKatzen=0x7f090016;
+        public static final int name=0x7f09001a;
+        public static final int organic=0x7f090018;
+        public static final int profile_HUID=0x7f09000c;
+        public static final int profile_image=0x7f09000a;
+        public static final int profile_name=0x7f09000b;
+        public static final int profile_status=0x7f09000e;
+        public static final int profile_status_text=0x7f09000d;
+        public static final int profile_table=0x7f090010;
+        public static final int profile_table_text=0x7f09000f;
+        public static final int recipeTitle=0x7f090013;
+        public static final int recipeTitleBar=0x7f090012;
+        public static final int signup=0x7f090009;
+        public static final int signup_HUID=0x7f09001b;
+        public static final int signup_name=0x7f09001c;
+        public static final int signup_password=0x7f09001d;
+        public static final int signup_password_confirm=0x7f09001e;
+        public static final int signup_submit=0x7f09001f;
+        public static final int title_friendfinder=0x7f090026;
+        public static final int title_login_image=0x7f090024;
+        public static final int title_menu=0x7f090027;
+        public static final int title_schedule=0x7f090028;
+        public static final int title_title=0x7f090021;
+        public static final int title_titleBar=0x7f090020;
+        public static final int vegan=0x7f090015;
+        public static final int vegetarian=0x7f090014;
+        public static final int welcomeTitle=0x7f090023;
+>>>>>>> refs/remotes/origin/master
     }
     public static final class layout {
         public static final int activity_log_in=0x7f030000;
