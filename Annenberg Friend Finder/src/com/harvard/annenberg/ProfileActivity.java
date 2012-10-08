@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
@@ -27,7 +29,7 @@ public class ProfileActivity extends Activity {
 		setContentView(R.layout.profile_layout);
 		prefs = getSharedPreferences("AFF", 0);
 		database = new DbAdapter(this);
-
+		database.open(false);
 		// Update Name and HUID
 		Cursor c = database.fetchUserByHUID(prefs.getInt("HUID", 0));
 		TextView name = (TextView) findViewById(R.id.profile_name);
@@ -37,6 +39,8 @@ public class ProfileActivity extends Activity {
 		huid.setText(c.getString(c
 				.getColumnIndexOrThrow(DbAdapter.KEY_USER_HUID)));
 
+		// Image
+		//TODO: Gallery set image stuff.
 		String uriString = c.getString(c
 				.getColumnIndexOrThrow(DbAdapter.KEY_USER_IMAGE));
 		if (uriString.equals("") == false) {
@@ -67,13 +71,28 @@ public class ProfileActivity extends Activity {
 					// Eating
 					break;
 				}
-				// if
 
 			}
 		});
 
 		// Table
 		TextView tableText = (TextView) findViewById(R.id.profile_table);
+		int table = prefs.getInt("table", 0);
+		tableText.setText((table == 0 ? "N/A" : "" + table));
+
+		// Check in button
+		Button b = (Button) findViewById(R.id.check_in);
+		b.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+				Intent i = new Intent(ProfileActivity.this,
+						AnnenbergActivity.class);
+				startActivity(i);
+
+			}
+		}
+
+		);
 
 	}
 }

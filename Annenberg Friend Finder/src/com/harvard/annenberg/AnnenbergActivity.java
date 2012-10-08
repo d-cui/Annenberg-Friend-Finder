@@ -1,5 +1,7 @@
 package com.harvard.annenberg;
 
-public class AnnenbergActivity {
+import android.app.Activity;
+
+public class AnnenbergActivity extends Activity{
 
 }
