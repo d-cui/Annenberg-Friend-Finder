@@ -27,6 +27,7 @@ public class LogInActivity extends Activity {
 		logInButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
+				database.open(true);
 				int HUID = Integer
 						.parseInt(((EditText) findViewById(R.id.login_HUID))
 								.getText().toString());
@@ -41,8 +42,10 @@ public class LogInActivity extends Activity {
 						.getText().toString();
 				if (!userPassword.equals(enteredPassword)) {
 					showAlert("Incorrect password entered.");
+					database.close();
 					return;
 				}
+				database.close();
 				// TODO: Log-in stuff
 				SharedPreferences.Editor editor = prefs.edit();
 				editor.putBoolean("login", true);

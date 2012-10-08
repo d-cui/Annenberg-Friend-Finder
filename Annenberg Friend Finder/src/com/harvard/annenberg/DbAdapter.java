@@ -60,7 +60,7 @@ public class DbAdapter {
 			+ " text default 'Unknown', " + KEY_USER_IMAGE
 			+ " text default 'Unknown', " + KEY_USER_HUID
 			+ " integer default '0', " + KEY_SERVER_ID + " long, "
-			+ KEY_PASSWORD + "text default 'Unknown', " + FLAG_1
+			+ KEY_PASSWORD + " text default 'Unknown', " + FLAG_1
 			+ " text default 'Unknown', " + FLAG_2
 			+ " text default 'Unknown', " + FLAG_3
 			+ " text default 'Unknown', " + FLAG_4
@@ -122,7 +122,6 @@ public class DbAdapter {
 	public int createUser(String name, String imageUri, int HUID,
 			String password) {
 
-		open(true);
 		String image = "";
 		if (!imageUri.equals(""))
 			image = imageUri;
@@ -138,7 +137,6 @@ public class DbAdapter {
 
 	public int updateUser(int id, String name, String imageUri, int HUID,
 			String password, long serverId) {
-		open(true);
 
 		String image = "";
 		if (imageUri != null && !imageUri.equals(""))
@@ -157,7 +155,6 @@ public class DbAdapter {
 
 	public Cursor fetchUser(int id) throws SQLException {
 		boolean found = false;
-		open(true);
 		Cursor mCursor = mDb.query(true, USER_DB_TABLE, null, KEY_USER_ID + "="
 				+ id, null, null, null, null, null);
 		if (mCursor != null) {
@@ -174,7 +171,6 @@ public class DbAdapter {
 
 	public Cursor fetchUserByHUID(int HUID) throws SQLException {
 		boolean found = false;
-		open(true);
 		Cursor mCursor = mDb.query(true, USER_DB_TABLE, null, KEY_USER_HUID
 				+ "=" + HUID, null, null, null, null, null);
 		if (mCursor != null) {
@@ -191,7 +187,6 @@ public class DbAdapter {
 
 	public Cursor fetchUser(long id) throws SQLException {
 		boolean found = false;
-		open(true);
 		Cursor mCursor = mDb.query(true, USER_DB_TABLE, null, KEY_SERVER_ID
 				+ "=" + id, null, null, null, null, null);
 		if (mCursor != null) {
@@ -213,7 +208,6 @@ public class DbAdapter {
 	 */
 	public Cursor fetchAllUsers() {
 		boolean found = false;
-		open(true);
 		Cursor mCursor = mDb.query(USER_DB_TABLE, null, null, null, null, null,
 				null);
 
@@ -230,8 +224,6 @@ public class DbAdapter {
 	}
 
 	public int updateServerId(int userId, long server_id) {
-		open(true);
-
 		ContentValues vals = new ContentValues();
 		vals.put(KEY_SERVER_ID, server_id);
 		return mDb.update(USER_DB_TABLE, vals, KEY_USER_ID + "=" + userId,
