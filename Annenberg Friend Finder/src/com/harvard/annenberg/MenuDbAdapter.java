@@ -107,8 +107,6 @@ public class MenuDbAdapter {
 	public int createFood(String date, String meal, String category,
 			String recipe, String name) {
 
-		open(true);
-
 		ContentValues vals = new ContentValues();
 		// vals.put(KEY_CONTACT_ID, contactId);
 		vals.put(KEY_FOOD_DATE, date.trim());
@@ -121,7 +119,6 @@ public class MenuDbAdapter {
 
 	public Cursor fetchFood(int id) throws SQLException {
 		boolean found = false;
-		open(true);
 		Cursor mCursor = mDb.query(true, FOOD_DB_TABLE, null, KEY_FOOD_ID + "="
 				+ id, null, null, null, null, null);
 		if (mCursor != null) {
@@ -138,7 +135,6 @@ public class MenuDbAdapter {
 
 	public Cursor fetchFoodByDate(String date) throws SQLException {
 		boolean found = false;
-		open(true);
 		Cursor mCursor = mDb.query(true, FOOD_DB_TABLE, null, KEY_FOOD_DATE
 				+ "='" + date + "'", null, null, null, null, null);
 		if (mCursor != null) {
@@ -160,7 +156,6 @@ public class MenuDbAdapter {
 	 */
 	public Cursor fetchAllFoods() {
 		boolean found = false;
-		open(true);
 		Cursor mCursor = mDb.query(FOOD_DB_TABLE, null, null, null, null, null,
 				null);
 
