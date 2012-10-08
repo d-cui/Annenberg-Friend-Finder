@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -46,10 +47,27 @@ public class SignUpActivity extends Activity {
 					return;
 				}
 				database.createUser(name, "", HUID, passwordConfirm);
-				
-				//TODO: GO TO MY PROFILE
+
+				showAlertAndTransfer("Profile created");
 			}
 		});
+	}
+
+	private void showAlertAndTransfer(String text) {
+		new AlertDialog.Builder(this)
+				.setTitle("Alert")
+				.setMessage(text)
+				.setPositiveButton("Okay",
+						new DialogInterface.OnClickListener() {
+
+							public void onClick(DialogInterface dialog,
+									int which) {
+								Intent i = new Intent(SignUpActivity.this,
+										LogInActivity.class);
+								startActivity(i);
+								finish();
+							}
+						}).setCancelable(false).show();
 	}
 
 	private void showAlert(String text) {
