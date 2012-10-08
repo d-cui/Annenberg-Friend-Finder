@@ -27,6 +27,8 @@ public class ProfileActivity extends Activity {
 		setContentView(R.layout.profile_layout);
 		prefs = getSharedPreferences("AFF", 0);
 		database = new DbAdapter(this);
+
+		// Update Name and HUID
 		Cursor c = database.fetchUserByHUID(prefs.getInt("HUID", 0));
 		TextView name = (TextView) findViewById(R.id.profile_name);
 		name.setText(c.getString(c
@@ -42,6 +44,8 @@ public class ProfileActivity extends Activity {
 			ImageView image = (ImageView) findViewById(R.id.profile_image);
 			image.setImageURI(uri);
 		}
+
+		// Spinner
 		Spinner s = (Spinner) findViewById(R.id.profile_status);
 		ArrayAdapter a = ArrayAdapter.createFromResource(this,
 				R.array.status_array, android.R.layout.simple_spinner_item);
@@ -49,12 +53,27 @@ public class ProfileActivity extends Activity {
 		s.setAdapter(a);
 		s.setOnItemClickListener(new OnItemClickListener() {
 
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
 					long arg3) {
 				// TODO Server update
-				if
+				switch (pos) {
+				case 0:
+					// N/A
+					break;
+				case 1:
+					// In Line
+					break;
+				case 2:
+					// Eating
+					break;
+				}
 
 			}
 		});
+		
+		// Table
+		TextView tableText = (TextView) findViewById(R.id.profile_table);
+		
+		
 	}
 }
