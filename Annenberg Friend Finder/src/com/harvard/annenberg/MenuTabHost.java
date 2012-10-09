@@ -189,7 +189,7 @@ public class MenuTabHost extends TabActivity {
 
 			try {
 				// Log.v("gsearch","gsearch result with AsyncTask");
-				//Log.v("Create", "Create successfully executed.");
+				// Log.v("Create", "Create successfully executed.");
 				return fetch();
 				// return downloadImage(url);
 			} catch (Exception e) {
@@ -227,7 +227,7 @@ public class MenuTabHost extends TabActivity {
 				for (int i = 0; i < foodArray.length(); i++) {
 
 					String date = foodArray.getJSONObject(i).getString("date");
-					//Log.v("Insert Date", date);
+					// Log.v("Insert Date", date);
 					String meal = foodArray.getJSONObject(i).getString("meal");
 					String category = foodArray.getJSONObject(i).getString(
 							"category");
@@ -242,14 +242,12 @@ public class MenuTabHost extends TabActivity {
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
+				db.close();
 				try {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-
-			db.close();
-
 		}
 
 		public String fetch() {

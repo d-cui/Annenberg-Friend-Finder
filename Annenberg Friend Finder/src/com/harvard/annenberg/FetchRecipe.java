@@ -92,6 +92,7 @@ public class FetchRecipe extends AsyncTask<String, Integer, String> {
 					context,
 					"Unable to retrieve data. Please check that you have a working internet connection.",
 					Toast.LENGTH_LONG).show();
+			Log.v("GG!", "JSON IS NULL");
 			return false;
 		}
 		try {
@@ -121,6 +122,7 @@ public class FetchRecipe extends AsyncTask<String, Integer, String> {
 
 			}
 
+			Log.v("YAY", "IT WORKS!");
 			return true;
 
 		} catch (Exception e) {
@@ -128,6 +130,7 @@ public class FetchRecipe extends AsyncTask<String, Integer, String> {
 		} finally {
 		}
 
+		Log.v("GG!", "JSON IS NULL");
 		return false;
 	}
 

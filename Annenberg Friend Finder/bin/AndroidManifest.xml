@@ -70,6 +70,10 @@
             android:name=".SignUpActivity"
             android:label="@string/title_activity_log_in" >
         </activity>
+        <activity
+            android:name=".RecipeActivity"
+            android:label="@string/title_activity_log_in" >
+        </activity>
     </application>
 
 </manifest>
