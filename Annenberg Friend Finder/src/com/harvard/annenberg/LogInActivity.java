@@ -40,6 +40,7 @@ public class LogInActivity extends Activity {
 						.getColumnIndexOrThrow(database.KEY_PASSWORD));
 				String enteredPassword = ((EditText) findViewById(R.id.login_password))
 						.getText().toString();
+				c.close();
 				if (!userPassword.equals(enteredPassword)) {
 					showAlert("Incorrect password entered.");
 					database.close();

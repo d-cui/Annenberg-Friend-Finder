@@ -16,24 +16,22 @@ import android.widget.TextView;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 
-public class PersonAdapter extends BaseExpandableListAdapter {
+public class FriendListAdapter extends BaseExpandableListAdapter {
 
 	private Context mContext;
 	private ExpandableListView mExpandableListView;
 	private ArrayList<HashMap<String, String>> groups;
-	private String[] groupKeys;
 	private ArrayList<ArrayList<HashMap<String, String>>> children;
 	private int[] groupStatus;
 
-	public PersonAdapter(Context context,
-			ArrayList<HashMap<String, String>> groups, String[] groupKeys,
+	public FriendListAdapter(Context context,
+			ArrayList<HashMap<String, String>> groups,
 			ArrayList<ArrayList<HashMap<String, String>>> child,
 			ExpandableListView expListView) {
 		mContext = context;
 		mExpandableListView = expListView;
 
 		this.groups = groups;
-		this.groupKeys = groupKeys;
 		this.children = child;
 
 		groupStatus = new int[groups.size()];
@@ -161,7 +159,7 @@ public class PersonAdapter extends BaseExpandableListAdapter {
 		} else {
 			groupHolder.img.setImageResource(R.drawable.collapse);
 		}
-		groupHolder.title.setText(groups.get(arg0).get(groupKeys[0]));
+		groupHolder.title.setText(groups.get(arg0).get("category"));
 
 		return arg2;
 	}

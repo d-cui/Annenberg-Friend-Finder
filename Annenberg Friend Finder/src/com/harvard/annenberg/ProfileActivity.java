@@ -1,8 +1,5 @@
 package com.harvard.annenberg;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,9 +11,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView;
 
@@ -82,8 +77,8 @@ public class ProfileActivity extends Activity {
 
 		// Table
 		TextView tableText = (TextView) findViewById(R.id.profile_table);
-		int table = prefs.getInt("table", 0);
-		tableText.setText((table == 0 ? "N/A" : "" + table));
+		String table = prefs.getString("table", "");
+		tableText.setText((table.equals("") ? "N/A" : "" + table));
 
 		// Check in button
 		Button b = (Button) findViewById(R.id.check_in);
