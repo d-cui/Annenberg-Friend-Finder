@@ -44,16 +44,19 @@ public class SignUpActivity extends Activity {
 				DbAdapter database = new DbAdapter(SignUpActivity.this);
 				database.open(false);
 				if (database.fetchUserByHUID(HUID) != null) {
+					database.close();
 					showAlert("Error: That HUID is already registered");
 					return;
 				}
 				if (database.createUser(name, "", HUID, passwordConfirm) < 0) {
+					database.close();
 					showAlertAndTransfer("Failed\n" + name + "\n" + HUID + "\n"
 							+ passwordConfirm + "\n");
 				} else {
+					database.close();
 					showAlertAndTransfer("Profile Created");
 				}
-				database.close();
+
 			}
 		});
 	}
