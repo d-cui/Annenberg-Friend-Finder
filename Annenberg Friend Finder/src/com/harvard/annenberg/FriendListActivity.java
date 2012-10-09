@@ -5,6 +5,9 @@ import java.util.HashMap;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 
 public class FriendListActivity extends Activity {
@@ -14,9 +17,21 @@ public class FriendListActivity extends Activity {
 
 	public void onCreate(Bundle bunny) {
 		super.onCreate(bunny);
+		setContentView(R.layout.friends_list_layout);
+		
 		// TODO: Server call, update requests + friends
+		
 		ExpandableListView expListView = (ExpandableListView) findViewById(android.R.id.list);
 		fla = new FriendListAdapter(this, getGroups(), getChilds(), expListView);
+		expListView.setAdapter(fla);
+		
+		Button b = (Button) findViewById(R.id.add_new_friend);
+		b.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				
+			}
+		});
 	}
 
 	private ArrayList<HashMap<String, String>> getGroups() {
