@@ -79,6 +79,7 @@ public class TitlePageActivity extends Activity {
 					+ mCursor.getString(mCursor
 							.getColumnIndexOrThrow(DbAdapter.KEY_USER_NAME))
 					+ ".");
+			mCursor.close();
 			db.close();
 		} else
 			mBottomText.setText("Not logged in.");
@@ -202,6 +203,7 @@ public class TitlePageActivity extends Activity {
 					+ mCursor.getString(mCursor
 							.getColumnIndexOrThrow(DbAdapter.KEY_USER_NAME))
 					+ ".");
+			mCursor.close();
 			db.close();
 		} else
 			mBottomText.setText("Not logged in.");
@@ -226,6 +228,7 @@ public class TitlePageActivity extends Activity {
 								+ mCursor.getString(mCursor
 										.getColumnIndexOrThrow(DbAdapter.KEY_USER_NAME))
 								+ ".");
+				mCursor.close();
 				db.close();
 			} else
 				mBottomText.setText("Not logged in.");
