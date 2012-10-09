@@ -43,7 +43,8 @@ public class ProfileActivity extends Activity {
 			ImageView image = (ImageView) findViewById(R.id.profile_image);
 			image.setImageURI(uri);
 		}
-
+		c.close();
+		database.close();
 		// Spinner
 		Spinner s = (Spinner) findViewById(R.id.profile_status);
 		ArrayAdapter a = ArrayAdapter.createFromResource(this,
