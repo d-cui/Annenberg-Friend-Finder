@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 
 public class FriendListActivity extends Activity {
@@ -18,20 +21,42 @@ public class FriendListActivity extends Activity {
 	public void onCreate(Bundle bunny) {
 		super.onCreate(bunny);
 		setContentView(R.layout.friends_list_layout);
-		
+
 		// TODO: Server call, update requests + friends
-		
+
 		ExpandableListView expListView = (ExpandableListView) findViewById(android.R.id.list);
 		fla = new FriendListAdapter(this, getGroups(), getChilds(), expListView);
 		expListView.setAdapter(fla);
-		
+
 		Button b = (Button) findViewById(R.id.add_new_friend);
 		b.setOnClickListener(new OnClickListener() {
-			
+
 			public void onClick(View v) {
-				
+				EditText e = (EditText) findViewById(R.id.add_friend_huid);
+				int friendHUID;
+				try {
+					friendHUID = Integer.parseInt(e.getText().toString());
+				} catch (NumberFormatException nfe) {
+					showAlert("Please enter valid HUID");
+					return;
+				}
+				// TODO: addFriend based on friendHUID
 			}
 		});
+	}
+
+	private void showAlert(String text) {
+		new AlertDialog.Builder(this)
+				.setTitle("Alert")
+				.setMessage(text)
+				.setPositiveButton("Okay",
+						new DialogInterface.OnClickListener() {
+
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// close
+							}
+						}).setCancelable(false).show();
 	}
 
 	private ArrayList<HashMap<String, String>> getGroups() {
