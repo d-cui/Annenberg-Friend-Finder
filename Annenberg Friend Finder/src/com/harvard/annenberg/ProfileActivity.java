@@ -23,28 +23,23 @@ public class ProfileActivity extends Activity {
 		super.onCreate(bun);
 		setContentView(R.layout.profile_layout);
 		prefs = getSharedPreferences("AFF", 0);
-		database = new DbAdapter(this);
-		database.open(false);
 		// Update Name and HUID
-		Cursor c = database.fetchUserByHUID(prefs.getInt("HUID", 0));
 		TextView name = (TextView) findViewById(R.id.profile_name);
-		name.setText(c.getString(c
-				.getColumnIndexOrThrow(DbAdapter.KEY_USER_NAME)));
+		name.setText(prefs.getString("n", ""));
 		TextView huid = (TextView) findViewById(R.id.profile_HUID);
-		huid.setText(c.getString(c
-				.getColumnIndexOrThrow(DbAdapter.KEY_USER_HUID)));
+		huid.setText(prefs.getString("huid", ""));
 
 		// Image
 		// TODO: Gallery set image stuff.
-		String uriString = c.getString(c
-				.getColumnIndexOrThrow(DbAdapter.KEY_USER_IMAGE));
-		if (uriString.equals("") == false) {
-			Uri uri = Uri.parse(uriString);
-			ImageView image = (ImageView) findViewById(R.id.profile_image);
-			image.setImageURI(uri);
-		}
-		c.close();
-		database.close();
+//		String uriString = c.getString(c
+//				.getColumnIndexOrThrow(DbAdapter.KEY_USER_IMAGE));
+//		if (uriString.equals("") == false) {
+//			Uri uri = Uri.parse(uriString);
+//			ImageView image = (ImageView) findViewById(R.id.profile_image);
+//			image.setImageURI(uri);
+//		}
+//		c.close();
+//		database.close();
 		// Spinner
 		Spinner s = (Spinner) findViewById(R.id.profile_status);
 		ArrayAdapter a = ArrayAdapter.createFromResource(this,

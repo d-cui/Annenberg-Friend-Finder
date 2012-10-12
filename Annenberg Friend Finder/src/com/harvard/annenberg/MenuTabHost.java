@@ -53,11 +53,6 @@ public class MenuTabHost extends TabActivity {
 
 		String savedDate = prefs.getString("date", null);
 		if (savedDate == null || !savedDate.equals(date)) {
-			SharedPreferences.Editor edit = prefs.edit();
-
-			edit.putString("date", date);
-			edit.commit();
-
 			fetcher = new FetchData(this);
 			fetcher.doFetch();
 		} else
@@ -201,6 +196,10 @@ public class MenuTabHost extends TabActivity {
 
 		protected void onPostExecute(String result) {
 			try {
+				SharedPreferences.Editor edit = prefs.edit();
+
+				edit.putString("date", date);
+				edit.commit();
 				menu = populateMenu();
 				mProgressDialog.dismiss();
 				getTabHost().setCurrentTab(1);

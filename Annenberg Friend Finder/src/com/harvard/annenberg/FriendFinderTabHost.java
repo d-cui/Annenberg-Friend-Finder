@@ -70,15 +70,15 @@ public class FriendFinderTabHost extends TabActivity {
 		// Tab for annenberg
 		TabSpec annenbergSpec = tabHost.newTabSpec("Annenberg");
 		annenbergSpec.setIndicator("Annenberg",
-				getResources().getDrawable(R.drawable.annenberg));
+				getResources().getDrawable(R.drawable.dining));
 		Intent annenbergIntent = new Intent(this, AnnenbergActivity.class);
 		annenbergIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		annenbergSpec.setContent(annenbergIntent);
 
-			tabHost.addTab(profileSpec);
-			tabHost.addTab(friendSpec);
-			tabHost.addTab(everyoneSpec);
-			tabHost.addTab(annenbergSpec);
+		tabHost.addTab(profileSpec);
+		tabHost.addTab(friendSpec);
+		tabHost.addTab(everyoneSpec);
+		tabHost.addTab(annenbergSpec);
 	}
 
 	private String getDate() {

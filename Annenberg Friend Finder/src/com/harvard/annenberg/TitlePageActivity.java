@@ -42,18 +42,15 @@ public class TitlePageActivity extends Activity {
 	private ImageView logStatus;
 	private boolean mIsLogin = false;
 
-	private int HUID;
-	private String hash_code;
-
-	private int count = 0;
-	private Button showCount;
-
 	private LinearLayout masterRow;
+
+	private SharedPreferences prefs;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		prefs = this.getSharedPreferences("AFF", MODE_PRIVATE);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.title_page);
@@ -73,14 +70,7 @@ public class TitlePageActivity extends Activity {
 
 		TextView mBottomText = (TextView) findViewById(R.id.welcomeTitle);
 		if (mIsLogin) {
-			db.open(true);
-			Cursor mCursor = db.fetchUserByHUID(HUID);
-			mBottomText.setText("Hi, "
-					+ mCursor.getString(mCursor
-							.getColumnIndexOrThrow(DbAdapter.KEY_USER_NAME))
-					+ ".");
-			mCursor.close();
-			db.close();
+			mBottomText.setText("Hi, " + prefs.getString("n", "") + ".");
 		} else
 			mBottomText.setText("Not logged in.");
 
@@ -183,7 +173,6 @@ public class TitlePageActivity extends Activity {
 	private void checkLogin() {
 		final SharedPreferences prefs = getSharedPreferences("AFF",
 				MODE_PRIVATE);
-		HUID = prefs.getInt("HUID", 0);
 		mIsLogin = prefs.getBoolean("login", false);
 	}
 
@@ -197,14 +186,7 @@ public class TitlePageActivity extends Activity {
 
 		TextView mBottomText = (TextView) findViewById(R.id.welcomeTitle);
 		if (mIsLogin) {
-			db.open(true);
-			Cursor mCursor = db.fetchUserByHUID(HUID);
-			mBottomText.setText("Hi, "
-					+ mCursor.getString(mCursor
-							.getColumnIndexOrThrow(DbAdapter.KEY_USER_NAME))
-					+ ".");
-			mCursor.close();
-			db.close();
+			mBottomText.setText("Hi, " + prefs.getString("n", "") + ".");
 		} else
 			mBottomText.setText("Not logged in.");
 		super.onResume();
@@ -221,15 +203,7 @@ public class TitlePageActivity extends Activity {
 
 			TextView mBottomText = (TextView) findViewById(R.id.welcomeTitle);
 			if (mIsLogin) {
-				db.open(true);
-				Cursor mCursor = db.fetchUserByHUID(HUID);
-				mBottomText
-						.setText("Hi, "
-								+ mCursor.getString(mCursor
-										.getColumnIndexOrThrow(DbAdapter.KEY_USER_NAME))
-								+ ".");
-				mCursor.close();
-				db.close();
+				mBottomText.setText("Hi, " + prefs.getString("n", "") + ".");
 			} else
 				mBottomText.setText("Not logged in.");
 		}
