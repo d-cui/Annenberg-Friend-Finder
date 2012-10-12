@@ -16,7 +16,7 @@ import android.widget.ExpandableListView;
 public class FriendListActivity extends Activity {
 	FriendListAdapter fla;
 	ArrayList<Request> requests;
-	ArrayList<Friend> friends;
+	ArrayList<Person> friends;
 
 	public void onCreate(Bundle bunny) {
 		super.onCreate(bunny);
@@ -85,7 +85,7 @@ public class FriendListActivity extends Activity {
 
 		// Do friends.
 		ArrayList<HashMap<String, String>> friendChildren = new ArrayList<HashMap<String, String>>();
-		for (Friend f : friends) {
+		for (Person f : friends) {
 			HashMap<String, String> h = new HashMap<String, String>();
 			h.put("name", f.name);
 			h.put("img", f.img);
@@ -104,11 +104,4 @@ public class FriendListActivity extends Activity {
 		String img;
 	}
 
-	public class Friend {
-		String name;
-		String img;
-		String status;
-		String table;
-		String time;
-	}
 }

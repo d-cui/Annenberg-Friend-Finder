@@ -64,16 +64,33 @@ public class SignUpActivity extends Activity {
 				int HUID = Integer
 						.parseInt(((EditText) findViewById(R.id.signup_HUID))
 								.getText().toString());
-				DbAdapter database = new DbAdapter(SignUpActivity.this);
-				database.open(false);
-				// if (database.fetchUserByHUID(HUID) != null) {
-				// showAlert("Error: That HUID is already registered");
-				// return;
-				// }
-				database.createUser(name, "", HUID, passwordConfirm);
-				database.close();
+//				DbAdapter database = new DbAdapter(SignUpActivity.this);
+//				database.open(false);
+//<<<<<<< HEAD
+//				// if (database.fetchUserByHUID(HUID) != null) {
+//				// showAlert("Error: That HUID is already registered");
+//				// return;
+//				// }
+//				database.createUser(name, "", HUID, passwordConfirm);
+//				database.close();
 
 				doSignUp(String.valueOf(HUID), password, name);
+//=======
+//				if (database.fetchUserByHUID(HUID) != null) {
+//					database.close();
+//					showAlert("Error: That HUID is already registered");
+//					return;
+//				}
+//				if (database.createUser(name, "", HUID, passwordConfirm) < 0) {
+//					database.close();
+//					showAlertAndTransfer("Failed\n" + name + "\n" + HUID + "\n"
+//							+ passwordConfirm + "\n");
+//				} else {
+//					database.close();
+//					showAlertAndTransfer("Profile Created");
+//				}
+//
+//>>>>>>> refs/remotes/origin/master
 			}
 		});
 	}
