@@ -98,7 +98,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 		PersonChildHolder childHolder;
 		if (arg3 == null) {
 			arg3 = LayoutInflater.from(mContext).inflate(
-					R.layout.friend_req_row, null);
+					R.layout.person_row, null);
 
 			childHolder = new PersonChildHolder();
 			childHolder.name = (TextView) arg3.findViewById(R.id.person_name);
