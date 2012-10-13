@@ -13,34 +13,55 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class AnnenbergActivity extends Activity {
-	
+
 	private ImageView annenbergImg;
+	float mx, my;
+	float topLeftX = 0;
+	float topLeftY = 0;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-		WebView webview = new WebView(this);
-		setContentView(webview);
+		setContentView(R.layout.annenberg_layout);
 
-		String data = "<body>" + "<img src=\"annenberglayout.png\"/></body>";
+		annenbergImg = (ImageView) this.findViewById(R.id.annenberg__img);
 
-		webview.loadDataWithBaseURL("file:///android_asset/", data,
-				"text/html", "utf-8", null);
-		webview.getSettings().setBuiltInZoomControls(false);
-		webview.getSettings().setSupportZoom(false);
-		webview.setOnTouchListener(clickListener);
+		annenbergImg.setOnTouchListener(new View.OnTouchListener() {
+
+			public boolean onTouch(View arg0, MotionEvent event) {
+
+				float curX, curY;
+
+				switch (event.getAction()) {
+
+				case MotionEvent.ACTION_DOWN:
+					mx = event.getRawX();
+					my = event.getRawY();
+					break;
+				case MotionEvent.ACTION_MOVE:
+					curX = event.getRawX();
+					curY = event.getRawY();
+					annenbergImg.scrollBy((int) (mx - curX), (int) (my - curY));
+					topLeftX += (mx - curX);
+					topLeftY += (my - curY);
+					mx = curX;
+					my = curY;
+					break;
+				case MotionEvent.ACTION_UP:
+					curX = event.getRawX();
+					curY = event.getRawY();
+					annenbergImg.scrollBy((int) (mx - curX), (int) (my - curY));
+					topLeftX += (mx - curX);
+					topLeftY += (my - curY);
+					break;
+				}
+
+				return true;
+			}
+		});
+
 	}
-
-	OnTouchListener clickListener = new OnTouchListener()
-	{
-
-		public boolean onTouch(View v, MotionEvent event) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-		
-	};
 }
