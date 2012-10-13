@@ -150,6 +150,7 @@ public class ProfileActivity extends Activity {
 
 		UpdateStatusTask upl = new UpdateStatusTask();
 		upl.execute(UPDATE_URL);
+		
 	}
 
 	public void getStatus() {
