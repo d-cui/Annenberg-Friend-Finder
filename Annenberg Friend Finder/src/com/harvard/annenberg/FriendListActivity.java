@@ -1,15 +1,6 @@
 package com.harvard.annenberg;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 
@@ -20,6 +11,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.ExpandableListView.OnChildClickListener;
 
 public class FriendListActivity extends Activity {
 	private FriendListAdapter fla;
@@ -68,17 +61,60 @@ public class FriendListActivity extends Activity {
 
 			public void onClick(View v) {
 				EditText e = (EditText) findViewById(R.id.add_friend_huid);
-				int friendHUID;
+				int friendHUID = 0;
 				try {
+					if (e.getText().toString().length() != 8) {
+						showAlert("Please enter valid HUID");
+						return;
+					}
 					friendHUID = Integer.parseInt(e.getText().toString());
 				} catch (NumberFormatException nfe) {
 					showAlert("Please enter valid HUID");
 					return;
 				}
+
+				if (friendHUID != 0) {
+					addFriend(prefs.getString("huid", ""),
+							String.valueOf(friendHUID));
+				}
 				// TODO: addFriend based on friendHUID
 			}
 		});
 	}
+
+	private OnChildClickListener reqListener = new OnChildClickListener() {
+
+		public boolean onChildClick(ExpandableListView parent, View v,
+				int groupPosition, int childPosition, long id) {
+			if (groupPosition == 0) {
+
+				final String friendHUID = children.get(0).get(childPosition)
+						.get("HUID");
+
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						FriendListActivity.this);
+				builder.setCancelable(true);
+				builder.setTitle("Options");
+				builder.setItems(R.array.req_array,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								if (which == 0) {
+									acceptFriend(prefs.getString("huid", ""),
+											friendHUID, "Y");
+								} else if (which == 1) {
+									acceptFriend(prefs.getString("huid", ""),
+											friendHUID, "N");
+								}
+							}
+						});
+				builder.create();
+				builder.show();
+			}
+			return true;
+		}
+
+	};
 
 	private void showAlert(String text) {
 		new AlertDialog.Builder(this)
@@ -155,6 +191,39 @@ public class FriendListActivity extends Activity {
 		upl.execute(FETCHFRIENDS_URL);
 	}
 
+	public void addFriend(String huid, String fhuid) {
+		mProgressDialog = new ProgressDialog(this);
+		mProgressDialog.setTitle("Adding Friend");
+		mProgressDialog.setMessage("Adding Friend, Please Wait");
+		mProgressDialog.setIndeterminate(true);
+
+		mProgressDialog.setCancelable(false);
+
+		mProgressDialog.show();
+		parameters = new Hashtable<String, String>();
+		parameters.put("huid", huid);
+		parameters.put("f_huid", fhuid);
+		AddFriendTask upl = new AddFriendTask();
+		upl.execute(ADDFRIEND_URL);
+	}
+
+	public void acceptFriend(String huid, String fhuid, String add) {
+		mProgressDialog = new ProgressDialog(this);
+		mProgressDialog.setTitle("Adding Friend");
+		mProgressDialog.setMessage("Adding Friend, Please Wait");
+		mProgressDialog.setIndeterminate(true);
+
+		mProgressDialog.setCancelable(false);
+
+		mProgressDialog.show();
+		parameters = new Hashtable<String, String>();
+		parameters.put("huid", huid);
+		parameters.put("f_huid", fhuid);
+		parameters.put("add", add);
+		AcceptFriendTask upl = new AcceptFriendTask();
+		upl.execute(ACCEPTFRIEND_URL);
+	}
+
 	public void fetchReq(String huid) {
 		parameters = new Hashtable<String, String>();
 		parameters.put("huid", huid);
@@ -221,7 +290,7 @@ public class FriendListActivity extends Activity {
 						String state = user.getString("state");
 						String table = user.getString("tableNum");
 						String image = user.getString("imageUri");
-						if (image == null)
+						if (image.equals("null"))
 							image = "";
 						String name = user.getString("name");
 
@@ -314,6 +383,137 @@ public class FriendListActivity extends Activity {
 						requests.add(req);
 					}
 
+				} else {
+					Log.v("STATUS", status);
+					String message = status;
+					showFinalAlert(message);
+				}
+			} catch (Exception e) {
+
+			}
+
+		}
+	};
+
+	private class AddFriendTask extends AsyncTask<String, Integer, String> {
+
+		protected String doInBackground(String... searchKey) {
+
+			String url = searchKey[0];
+
+			try {
+				// Log.v("gsearch","gsearch result with AsyncTask");
+				return ServerDbAdapter.connectToServer(url, parameters);
+				// return "SUCCESS";
+				// return downloadImage(url);
+			} catch (Exception e) {
+				// Log.v("Exception google search","Exception:"+e.getMessage());
+				return null;
+
+			}
+		}
+
+		protected void onPostExecute(String result) {
+			// Toast.makeText(this.get, "Your Ringtone has been downloaded",
+			// Toast.LENGTH_LONG).show();
+			try {
+				// displayMsg();
+				// displayImage(resultbm);
+				mProgressDialog.dismiss();
+				showUploadSuccess(result);
+				// Log.v("Ringtone","Ringtone Path:"+resultbm);
+
+			} catch (Exception e) {
+				// Log.v("Exception google search","Exception:"+e.getMessage());
+
+			}
+
+		}
+
+		public void showUploadSuccess(String json) {
+			Log.v("JSON", json);
+			if (json == null) {
+				String message = "An network error has occured. Please try again later";
+				showFinalAlert(message);
+				return;
+			}
+			try {
+				JSONObject object = new JSONObject(json);
+				String status = object.getString("status");
+				status = status.trim();
+				Log.v("STATUS", "Status is: " + status);
+				if (status.equals("OK")) {
+
+					String message = "Friend successfully added";
+					showFinalAlert(message);
+
+				} else {
+					Log.v("STATUS", status);
+					String message = status;
+					showFinalAlert(message);
+				}
+			} catch (Exception e) {
+
+			}
+
+		}
+	};
+
+	private class AcceptFriendTask extends AsyncTask<String, Integer, String> {
+
+		protected String doInBackground(String... searchKey) {
+
+			String url = searchKey[0];
+
+			try {
+				// Log.v("gsearch","gsearch result with AsyncTask");
+				return ServerDbAdapter.connectToServer(url, parameters);
+				// return "SUCCESS";
+				// return downloadImage(url);
+			} catch (Exception e) {
+				// Log.v("Exception google search","Exception:"+e.getMessage());
+				return null;
+
+			}
+		}
+
+		protected void onPostExecute(String result) {
+			// Toast.makeText(this.get, "Your Ringtone has been downloaded",
+			// Toast.LENGTH_LONG).show();
+			try {
+				// displayMsg();
+				// displayImage(resultbm);
+				mProgressDialog.dismiss();
+				showUploadSuccess(result);
+				// Log.v("Ringtone","Ringtone Path:"+resultbm);
+
+			} catch (Exception e) {
+				// Log.v("Exception google search","Exception:"+e.getMessage());
+
+			}
+
+		}
+
+		public void showUploadSuccess(String json) {
+			Log.v("JSON", json);
+			if (json == null) {
+				String message = "An network error has occured. Please try again later";
+				showFinalAlert(message);
+				return;
+			}
+			try {
+				JSONObject object = new JSONObject(json);
+				String status = object.getString("status");
+				status = status.trim();
+				Log.v("STATUS", "Status is: " + status);
+				if (status.equals("ADD")) {
+
+					String message = "Friend successfully added.";
+					showFinalAlert(message);
+
+				} else if (status.equals("REMOVE")) {
+					String message = "Friend successfully rejected.";
+					showFinalAlert(message);
 				} else {
 					Log.v("STATUS", status);
 					String message = status;

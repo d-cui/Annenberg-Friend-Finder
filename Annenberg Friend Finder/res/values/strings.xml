@@ -11,6 +11,11 @@
 		<item>Eating</item>
 	</string-array>
 	
+    <string-array name="req_array">
+		<item>Accept</item>
+		<item>Reject</item>
+	</string-array>
+	
     <string name="set_status">Set Status</string>
 
 </resources>
