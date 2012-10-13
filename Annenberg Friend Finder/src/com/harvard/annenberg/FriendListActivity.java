@@ -13,6 +13,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -28,15 +29,21 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class FriendListActivity extends Activity {
-	FriendListAdapter fla;
-	ArrayList<Request> requests;
-	ArrayList<Person> friends;
+	private FriendListAdapter fla;
+	private ExpandableListView expListView;
+	private ArrayList<Request> requests;
+	private ArrayList<Person> friends;
 
 	private ProgressDialog mProgressDialog;
 	private Hashtable<String, String> parameters;
+	private SharedPreferences prefs;
+
+	private ArrayList<HashMap<String, String>> groups;
+	private ArrayList<ArrayList<HashMap<String, String>>> children;
 
 	public static final String FETCHFRIENDS_URL = "http://mgm.funformobile.com/aff/fetchFriends.php";
 	public static final String FETCHREQ_URL = "http://mgm.funformobile.com/aff/fetchFriendRequests.php";
@@ -47,13 +54,16 @@ public class FriendListActivity extends Activity {
 		super.onCreate(bunny);
 		setContentView(R.layout.friends_list_layout);
 
+		friends = new ArrayList<Person>();
+		requests = new ArrayList<Request>();
+		prefs = this.getSharedPreferences("AFF", MODE_PRIVATE);
+
 		// TODO: Server call, update requests + friends
+		fetchFriends(prefs.getString("huid", ""));
+		fetchReq(prefs.getString("huid", ""));
+		expListView = (ExpandableListView) findViewById(android.R.id.list);
 
-		ExpandableListView expListView = (ExpandableListView) findViewById(android.R.id.list);
-		fla = new FriendListAdapter(this, getGroups(), getChilds(), expListView);
-		expListView.setAdapter(fla);
-
-		Button b = (Button) findViewById(R.id.add_new_friend);
+		ImageView b = (ImageView) findViewById(R.id.add_new_friend);
 		b.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -117,7 +127,7 @@ public class FriendListActivity extends Activity {
 			h.put("status", f.status);
 			h.put("table", f.table);
 			h.put("time", f.time);
-
+			friendChildren.add(h);
 		}
 		result.add(friendChildren);
 		return result;
@@ -130,23 +140,26 @@ public class FriendListActivity extends Activity {
 	}
 
 	// Sign in server stuff
-	public void doSignUp(String huid, String password, String username) {
+	public void fetchFriends(String huid) {
 		mProgressDialog = new ProgressDialog(this);
-		mProgressDialog.setTitle("Sign Up");
-		mProgressDialog.setMessage("Signing Up, Please Wait");
+		mProgressDialog.setTitle("Fetching Friends");
+		mProgressDialog.setMessage("Fetching Friends, Please Wait");
 		mProgressDialog.setIndeterminate(true);
 
 		mProgressDialog.setCancelable(false);
 
 		mProgressDialog.show();
 		parameters = new Hashtable<String, String>();
-
-		parameters.put("passwd", password);
-		String usrnm = username.replace("\n", " ");
-		parameters.put("name", usrnm.trim());
 		parameters.put("huid", huid);
 		FetchFriendsTask upl = new FetchFriendsTask();
 		upl.execute(FETCHFRIENDS_URL);
+	}
+
+	public void fetchReq(String huid) {
+		parameters = new Hashtable<String, String>();
+		parameters.put("huid", huid);
+		FetchReqTask upl = new FetchReqTask();
+		upl.execute(FETCHREQ_URL);
 	}
 
 	private class FetchFriendsTask extends AsyncTask<String, Integer, String> {
@@ -175,11 +188,138 @@ public class FriendListActivity extends Activity {
 				// displayImage(resultbm);
 				mProgressDialog.dismiss();
 				showUploadSuccess(result);
-
 				// Log.v("Ringtone","Ringtone Path:"+resultbm);
 
 			} catch (Exception e) {
 				// Log.v("Exception google search","Exception:"+e.getMessage());
+
+			}
+
+		}
+
+		public void showUploadSuccess(String json) {
+			Log.v("JSON", json);
+			if (json == null) {
+				String message = "An network error has occured. Please try again later";
+				showFinalAlert(message);
+				return;
+			}
+			try {
+				JSONObject object = new JSONObject(json);
+				String status = object.getString("status");
+				status = status.trim();
+				Log.v("STATUS", "Status is: " + status);
+				if (status.equals("OK")) {
+
+					JSONArray list = new JSONArray(object.getString("list"));
+					int length = list.length();
+					for (int i = 0; i < length; i++) {
+						JSONObject user = list.getJSONObject(i);
+
+						String time = user.getString("time");
+						String HUID = user.getString("huid");
+						String state = user.getString("state");
+						String table = user.getString("tableNum");
+						String image = user.getString("imageUri");
+						if (image == null)
+							image = "";
+						String name = user.getString("name");
+
+						Person person = new Person(Integer.valueOf(HUID), name,
+								image, state, table, time);
+
+						friends.add(person);
+					}
+				} else {
+					Log.v("STATUS", status);
+					String message = status;
+					showFinalAlert(message);
+				}
+			} catch (Exception e) {
+
+			}
+
+		}
+	};
+
+	private class FetchReqTask extends AsyncTask<String, Integer, String> {
+
+		protected String doInBackground(String... searchKey) {
+
+			String url = searchKey[0];
+
+			try {
+				// Log.v("gsearch","gsearch result with AsyncTask");
+				return ServerDbAdapter.connectToServer(url, parameters);
+				// return "SUCCESS";
+				// return downloadImage(url);
+			} catch (Exception e) {
+				// Log.v("Exception google search","Exception:"+e.getMessage());
+				return null;
+
+			}
+		}
+
+		protected void onPostExecute(String result) {
+			// Toast.makeText(this.get, "Your Ringtone has been downloaded",
+			// Toast.LENGTH_LONG).show();
+			try {
+				// displayMsg();
+				// displayImage(resultbm);
+				showUploadSuccess(result);
+				groups = getGroups();
+				children = getChilds();
+				fla = new FriendListAdapter(FriendListActivity.this, groups,
+						children, expListView);
+				expListView.setAdapter(fla);
+				// Log.v("Ringtone","Ringtone Path:"+resultbm);
+
+			} catch (Exception e) {
+				// Log.v("Exception google search","Exception:"+e.getMessage());
+
+			}
+
+		}
+
+		public void showUploadSuccess(String json) {
+			Log.v("JSON", json);
+			if (json == null) {
+				String message = "An network error has occured. Please try again later";
+				showFinalAlert(message);
+				return;
+			}
+			try {
+				JSONObject object = new JSONObject(json);
+				String status = object.getString("status");
+				status = status.trim();
+				Log.v("STATUS", "Status is: " + status);
+				if (status.equals("OK")) {
+
+					JSONArray list = new JSONArray(object.getString("list"));
+					int length = list.length();
+					for (int i = 0; i < length; i++) {
+						JSONObject user = list.getJSONObject(i);
+
+						String HUID = user.getString("huid");
+						String image = user.getString("imageUri");
+						if (image == null)
+							image = "";
+						String name = user.getString("name");
+
+						Request req = new Request();
+						req.HUID = HUID;
+						req.img = image;
+						req.name = name;
+
+						requests.add(req);
+					}
+
+				} else {
+					Log.v("STATUS", status);
+					String message = status;
+					showFinalAlert(message);
+				}
+			} catch (Exception e) {
 
 			}
 
@@ -197,42 +337,5 @@ public class FriendListActivity extends Activity {
 								// finish();
 							}
 						}).setCancelable(false).show();
-	}
-
-	public void showUploadSuccess(String json) {
-		Log.v("JSON", json);
-		if (json == null) {
-			String message = "An network error has occured. Please try again later";
-			showFinalAlert(message);
-			return;
-		}
-		try {
-			JSONObject object = new JSONObject(json);
-			String status = object.getString("status");
-			status = status.trim();
-			Log.v("STATUS", "Status is: " + status);
-			if (status.equals("OK")) {
-
-				SharedPreferences prefs = getSharedPreferences("AFF",
-						MODE_PRIVATE);
-				SharedPreferences.Editor prefsEditor = prefs.edit();
-				prefsEditor.putString("h", object.getString("h"));
-				prefsEditor.putString("huid", object.getString("huid"));
-				prefsEditor.putString("n", object.getString("n"));
-				prefsEditor.putBoolean("login", true);
-				prefsEditor.commit();
-
-				Toast.makeText(this, "You have successfully Signed Up",
-						Toast.LENGTH_LONG).show();
-				finish();
-			} else {
-				Log.v("STATUS", status);
-				String message = status;
-				showFinalAlert(message);
-			}
-		} catch (Exception e) {
-
-		}
-
 	}
 }
