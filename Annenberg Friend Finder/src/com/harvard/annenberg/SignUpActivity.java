@@ -64,33 +64,33 @@ public class SignUpActivity extends Activity {
 				int HUID = Integer
 						.parseInt(((EditText) findViewById(R.id.signup_HUID))
 								.getText().toString());
-//				DbAdapter database = new DbAdapter(SignUpActivity.this);
-//				database.open(false);
-//<<<<<<< HEAD
-//				// if (database.fetchUserByHUID(HUID) != null) {
-//				// showAlert("Error: That HUID is already registered");
-//				// return;
-//				// }
-//				database.createUser(name, "", HUID, passwordConfirm);
-//				database.close();
+				// DbAdapter database = new DbAdapter(SignUpActivity.this);
+				// database.open(false);
+				// if (database.fetchUserByHUID(HUID) != null) {
+				// showAlert("Error: That HUID is already registered");
+				// return;
+				// }
+				// database.createUser(name, "", HUID, passwordConfirm);
+				// database.close();
 
 				doSignUp(String.valueOf(HUID), password, name);
-//=======
-//				if (database.fetchUserByHUID(HUID) != null) {
-//					database.close();
-//					showAlert("Error: That HUID is already registered");
-//					return;
-//				}
-//				if (database.createUser(name, "", HUID, passwordConfirm) < 0) {
-//					database.close();
-//					showAlertAndTransfer("Failed\n" + name + "\n" + HUID + "\n"
-//							+ passwordConfirm + "\n");
-//				} else {
-//					database.close();
-//					showAlertAndTransfer("Profile Created");
-//				}
-//
-//>>>>>>> refs/remotes/origin/master
+				// =======
+				// if (database.fetchUserByHUID(HUID) != null) {
+				// database.close();
+				// showAlert("Error: That HUID is already registered");
+				// return;
+				// }
+				// if (database.createUser(name, "", HUID, passwordConfirm) < 0)
+				// {
+				// database.close();
+				// showAlertAndTransfer("Failed\n" + name + "\n" + HUID + "\n"
+				// + passwordConfirm + "\n");
+				// } else {
+				// database.close();
+				// showAlertAndTransfer("Profile Created");
+				// }
+				//
+				// >>>>>>> refs/remotes/origin/master
 			}
 		});
 	}
@@ -290,14 +290,8 @@ public class SignUpActivity extends Activity {
 				prefsEditor.putString("h", object.getString("h"));
 				prefsEditor.putString("huid", object.getString("huid"));
 				prefsEditor.putString("n", object.getString("n"));
+				prefsEditor.putBoolean("login", true);
 				prefsEditor.commit();
-
-				// Bundle bundle = new Bundle();
-				// bundle.putString("json", json);
-				//
-				// Intent mIntent = new Intent();
-				// mIntent.putExtras(bundle);
-				// setResult(RESULT_OK, mIntent);
 
 				Toast.makeText(this, "You have successfully Signed Up",
 						Toast.LENGTH_LONG).show();

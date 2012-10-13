@@ -235,13 +235,6 @@ public class LogInActivity extends Activity {
 				prefsEditor.putBoolean("login", true);
 				prefsEditor.commit();
 
-				// Bundle bundle = new Bundle();
-				// bundle.putString("json", json);
-				//
-				// Intent mIntent = new Intent();
-				// mIntent.putExtras(bundle);
-				// setResult(RESULT_OK, mIntent);
-
 				Toast.makeText(this, "You have successfully logged in.",
 						Toast.LENGTH_LONG).show();
 				finish();
