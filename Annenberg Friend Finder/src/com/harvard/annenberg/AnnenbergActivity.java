@@ -1,9 +1,19 @@
 package com.harvard.annenberg;
 
+import java.util.Hashtable;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -14,6 +24,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class AnnenbergActivity extends Activity {
+
+	private static final String CHECKIN_URL = "http://mgm.funformobile.com/aff/checkIn.php";
+	private ProgressDialog mProgressDialog;
+	private Hashtable<String, String> parameters;
 
 	private ImageView annenbergImg;
 	float mx;
@@ -165,5 +179,96 @@ public class AnnenbergActivity extends Activity {
 			}
 		});
 
+	}
+
+	public void checkIn(String huid, String tableNum) {
+		mProgressDialog = new ProgressDialog(this);
+		mProgressDialog.setTitle("Checking In");
+		mProgressDialog.setMessage("Checking in, Please Wait");
+		mProgressDialog.setIndeterminate(true);
+
+		mProgressDialog.setCancelable(false);
+
+		mProgressDialog.show();
+		parameters = new Hashtable<String, String>();
+		parameters.put("huid", huid);
+		parameters.put("table", tableNum);
+		CheckInTask upl = new CheckInTask();
+		upl.execute(CHECKIN_URL);
+	}
+
+	private class CheckInTask extends AsyncTask<String, Integer, String> {
+
+		protected String doInBackground(String... searchKey) {
+
+			String url = searchKey[0];
+
+			try {
+				// Log.v("gsearch","gsearch result with AsyncTask");
+				return ServerDbAdapter.connectToServer(url, parameters);
+				// return "SUCCESS";
+				// return downloadImage(url);
+			} catch (Exception e) {
+				// Log.v("Exception google search","Exception:"+e.getMessage());
+				return null;
+
+			}
+		}
+
+		protected void onPostExecute(String result) {
+			// Toast.makeText(this.get, "Your Ringtone has been downloaded",
+			// Toast.LENGTH_LONG).show();
+			try {
+				// displayMsg();
+				// displayImage(resultbm);
+				mProgressDialog.dismiss();
+				showUploadSuccess(result);
+				// Log.v("Ringtone","Ringtone Path:"+resultbm);
+
+			} catch (Exception e) {
+				// Log.v("Exception google search","Exception:"+e.getMessage());
+
+			}
+
+		}
+
+		public void showUploadSuccess(String json) {
+			Log.v("JSON", json);
+			if (json == null) {
+				String message = "An network error has occured. Please try again later";
+				showFinalAlert(message);
+				return;
+			}
+			try {
+				JSONObject object = new JSONObject(json);
+				String status = object.getString("status");
+				status = status.trim();
+				Log.v("STATUS", "Status is: " + status);
+				if (status.equals("OK")) {
+					String message = "You have checked in!";
+					showFinalAlert(message);
+				} else {
+					Log.v("STATUS", status);
+					String message = status;
+					showFinalAlert(message);
+				}
+			} catch (Exception e) {
+
+			}
+
+		}
+	};
+
+	private void showFinalAlert(CharSequence message) {
+		new AlertDialog.Builder(AnnenbergActivity.this)
+				.setTitle("Error")
+				.setMessage(message)
+				.setPositiveButton("Okay",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								// finish();
+							}
+						}).setCancelable(false).show();
 	}
 }
