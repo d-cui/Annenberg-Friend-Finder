@@ -121,6 +121,8 @@ public class AnnenbergActivity extends Activity {
 					}
 					if (Math.abs(beginTapX - curX) < 10
 							&& Math.abs(beginTapY - curY) < 10) {
+						
+						//They tapped a table!
 						int absoluteX = (int) (topLeftX + curX);
 						int absoluteY = (int) (topLeftY + curY);
 						if (absoluteX > imgWidth || absoluteY > imgHeight) {
