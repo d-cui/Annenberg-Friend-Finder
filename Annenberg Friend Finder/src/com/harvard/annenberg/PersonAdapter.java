@@ -2,6 +2,7 @@ package com.harvard.annenberg;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import android.app.Activity;
 import android.content.Context;
@@ -49,8 +50,18 @@ public class PersonAdapter extends ArrayAdapter {
 			table += "A";
 		((TextView) view.findViewById(R.id.person_table)).setText("Table: "
 				+ table + " ");
+		String time = people.get(position).getTime();
+		if(time.equals("null")){
+			time = "None";
+		}
+		else
+		{
+			StringTokenizer st = new StringTokenizer(time);
+			st.nextToken();
+			time = st.nextToken();
+		}
 		((TextView) view.findViewById(R.id.person_time))
-				.setText("Last check-in: " + people.get(position).getTime());
+				.setText("Last check-in: " + time);
 		ImageView i = ((ImageView) view.findViewById(R.id.person_image));
 		String image = people.get(position).getImg();
 		if (image.equals("") == false) {
