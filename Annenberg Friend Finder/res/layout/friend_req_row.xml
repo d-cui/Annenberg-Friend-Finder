@@ -11,25 +11,25 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        />
+        android:src="@drawable/defaulticon" />
 
     <TextView
         android:id="@+id/request_name"
-        android:textColor="#FFFFFFFF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/request_image"
         android:layout_marginLeft="25dp"
         android:layout_toRightOf="@+id/request_image"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#FFFFFFFF" />
 
     <TextView
         android:id="@+id/request_huid"
-        android:textColor="#FFFFFFFF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/request_name"
         android:layout_below="@+id/request_name"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#FFFFFFFF" />
 
 </RelativeLayout>

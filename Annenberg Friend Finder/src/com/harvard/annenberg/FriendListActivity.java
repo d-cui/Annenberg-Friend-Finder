@@ -55,6 +55,7 @@ public class FriendListActivity extends Activity {
 		fetchFriends(prefs.getString("huid", ""));
 		fetchReq(prefs.getString("huid", ""));
 		expListView = (ExpandableListView) findViewById(android.R.id.list);
+		expListView.setOnChildClickListener(reqListener);
 		expListView.setGroupIndicator(null);
 
 		ImageView b = (ImageView) findViewById(R.id.add_new_friend);

@@ -34,7 +34,7 @@ public class AnnenbergActivity extends Activity {
 	private ProgressDialog mProgressDialog;
 	private Hashtable<String, String> parameters;
 	private SharedPreferences prefs;
-	private CountDownTimer curTimer;
+	private static CountDownTimer curTimer;
 	private ImageView annenbergImg;
 	float mx;
 	float my;
@@ -46,6 +46,8 @@ public class AnnenbergActivity extends Activity {
 	int screenHeight;
 	private int tableId = 0;
 
+	private boolean shouldFinish;
+
 	float beginTapX;
 	float beginTapY;
 
@@ -54,6 +56,7 @@ public class AnnenbergActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		shouldFinish = this.getIntent().getBooleanExtra("STARTCODE", false);
 		prefs = getSharedPreferences("AFF", MODE_PRIVATE);
 		mx = 0.0f;
 		my = 0.0f;
@@ -253,10 +256,12 @@ public class AnnenbergActivity extends Activity {
 			try {
 				mProgressDialog.dismiss();
 				showUploadSuccess(result);
-				Intent intent = AnnenbergActivity.this.getIntent();
-				intent.putExtra("tableNum", tableId);
-				AnnenbergActivity.this.setResult(RESULT_OK, intent);
-				AnnenbergActivity.this.finish();
+				if (shouldFinish) {
+					Intent intent = AnnenbergActivity.this.getIntent();
+					intent.putExtra("tableNum", tableId);
+					AnnenbergActivity.this.setResult(RESULT_OK, intent);
+					AnnenbergActivity.this.finish();
+				}
 
 			} catch (Exception e) {
 

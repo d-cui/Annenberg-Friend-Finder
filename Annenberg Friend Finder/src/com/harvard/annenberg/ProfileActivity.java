@@ -96,6 +96,7 @@ public class ProfileActivity extends Activity {
 			public void onClick(View v) {
 				Intent i = new Intent(ProfileActivity.this,
 						AnnenbergActivity.class);
+				i.putExtra("STARTCODE", true);
 				startActivityForResult(i, 0);
 
 			}
@@ -109,6 +110,7 @@ public class ProfileActivity extends Activity {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		if (resultCode == RESULT_OK) {
+			getStatus();
 			int tableNum = data.getIntExtra("tableNum", tableID);
 
 			String tableString = "" + ((tableNum - 1) % 17 + 1);
@@ -214,18 +216,11 @@ public class ProfileActivity extends Activity {
 		}
 
 		protected void onPostExecute(String result) {
-			// Toast.makeText(this.get, "Your Ringtone has been downloaded",
-			// Toast.LENGTH_LONG).show();
 			try {
-				// displayMsg();
-				// displayImage(resultbm);
 				mProgressDialog.dismiss();
 				showUploadSuccess(result);
 
-				// Log.v("Ringtone","Ringtone Path:"+resultbm);
-
 			} catch (Exception e) {
-				// Log.v("Exception google search","Exception:"+e.getMessage());
 
 			}
 
@@ -369,7 +364,7 @@ public class ProfileActivity extends Activity {
 			try {
 				// displayMsg();
 				// displayImage(resultbm);
-				// mProgressDialog.dismiss();
+				mProgressDialog.dismiss();
 				showUploadSuccess(result);
 
 				// Log.v("Ringtone","Ringtone Path:"+resultbm);
