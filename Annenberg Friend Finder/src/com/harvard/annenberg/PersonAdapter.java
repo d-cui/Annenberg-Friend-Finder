@@ -24,12 +24,33 @@ public class PersonAdapter extends ArrayAdapter {
 		View view = super.getView(position, convertView, parent);
 		((TextView) view.findViewById(R.id.person_name)).setText(people.get(
 				position).getName());
-		((TextView) view.findViewById(R.id.person_status)).setText(people.get(
-				position).getStatus());
-		((TextView) view.findViewById(R.id.person_table)).setText(people.get(
-				position).getTable());
-		((TextView) view.findViewById(R.id.person_time)).setText(people.get(
-				position).getTime());
+		int statusID = Integer.parseInt(people.get(position).getStatus());
+		String status = "";
+		if (statusID == 1) {
+			status = "N/A";
+		}
+		if (statusID == 2) {
+			status = "In line";
+		}
+		if (statusID == 3) {
+			status = "Eating";
+		}
+		((TextView) view.findViewById(R.id.person_status)).setText("Status: "
+				+ status + " ");
+		int tableID = Integer.parseInt(people.get(position).getTable());
+		String table = "" + tableID;
+		if (tableID > 17 && tableID <= 34)
+			table += "B";
+		else if (tableID > 34)
+			table += "C";
+		else if (tableID == 0)
+			table = "N/A";
+		else
+			table += "A";
+		((TextView) view.findViewById(R.id.person_table)).setText("Table: "
+				+ table + " ");
+		((TextView) view.findViewById(R.id.person_time))
+				.setText("Last check-in: " + people.get(position).getTime());
 		ImageView i = ((ImageView) view.findViewById(R.id.person_image));
 		String image = people.get(position).getImg();
 		if (image.equals("") == false) {
