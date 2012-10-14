@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
@@ -43,6 +44,7 @@ public class AnnenbergActivity extends Activity {
 	int imgHeight;
 	int screenWidth;
 	int screenHeight;
+	private int tableId = 0;
 
 	float beginTapX;
 	float beginTapY;
@@ -121,7 +123,6 @@ public class AnnenbergActivity extends Activity {
 							&& Math.abs(beginTapY - curY) < 10) {
 						int absoluteX = (int) (topLeftX + curX);
 						int absoluteY = (int) (topLeftY + curY);
-						int tableId = 0;
 						if (absoluteX > imgWidth || absoluteY > imgHeight) {
 							break;
 						}
@@ -252,6 +253,9 @@ public class AnnenbergActivity extends Activity {
 			try {
 				mProgressDialog.dismiss();
 				showUploadSuccess(result);
+				Intent intent = AnnenbergActivity.this.getIntent();
+				intent.putExtra("tableNum", tableId);
+				AnnenbergActivity.this.setResult(RESULT_OK, intent);
 				AnnenbergActivity.this.finish();
 
 			} catch (Exception e) {

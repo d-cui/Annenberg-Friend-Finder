@@ -85,9 +85,9 @@ public class ProfileActivity extends Activity {
 		getStatus();
 
 		// Table
-		TextView tableText = (TextView) findViewById(R.id.profile_table);
-		String table = prefs.getString("table", "");
-		tableText.setText((table.equals("") ? "N/A" : "" + table));
+		// TextView tableText = (TextView) findViewById(R.id.profile_table);
+		// String table = prefs.getString("table", "");
+		// tableText.setText((table.equals("") ? "N/A" : "" + table));
 
 		// Check in button
 		Button b = (Button) findViewById(R.id.check_in);
@@ -96,13 +96,34 @@ public class ProfileActivity extends Activity {
 			public void onClick(View v) {
 				Intent i = new Intent(ProfileActivity.this,
 						AnnenbergActivity.class);
-				startActivity(i);
+				startActivityForResult(i, 0);
 
 			}
 		}
 
 		);
 
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (resultCode == RESULT_OK) {
+			int tableNum = data.getIntExtra("tableNum", tableID);
+
+			String tableString = "" + ((tableNum - 1) % 17 + 1);
+			if (tableNum > 17 && tableNum <= 34)
+				tableString += "B";
+			else if (tableNum > 34)
+				tableString += "C";
+			else if (tableNum == 0)
+				tableString = "N/A";
+			else
+				tableString += "A";
+
+			table.setText(tableString);
+
+		}
 	}
 
 	OnItemSelectedListener statusListener = new OnItemSelectedListener() {
@@ -154,7 +175,7 @@ public class ProfileActivity extends Activity {
 
 		UpdateStatusTask upl = new UpdateStatusTask();
 		upl.execute(UPDATE_URL);
-		
+
 	}
 
 	public void getStatus() {
@@ -348,7 +369,7 @@ public class ProfileActivity extends Activity {
 			try {
 				// displayMsg();
 				// displayImage(resultbm);
-//				mProgressDialog.dismiss();
+				// mProgressDialog.dismiss();
 				showUploadSuccess(result);
 
 				// Log.v("Ringtone","Ringtone Path:"+resultbm);
@@ -373,17 +394,17 @@ public class ProfileActivity extends Activity {
 				status = status.trim();
 				Log.v("STATUS", "Status is: " + status);
 				if (status.equals("OK")) {
-
-					currentSelection = Integer.valueOf(object
-							.getString("stateNum"));
-					timeOfUpdate = object.getString("time").split(" ")[1];
+					JSONArray list = new JSONArray(object.getString("list"));
+					JSONObject info = list.getJSONObject(0);
+					currentSelection = info.getInt("statusNum");
+					timeOfUpdate = info.getString("time").split(" ")[1];
 					prefs.edit().putInt("status", currentSelection - 1)
 							.commit();
-					tableID = object.getInt("table");
+					tableID = info.getInt("tableNum");
 
 					if (prefs.getInt("status", -1) != -1)
 						s.setSelection(prefs.getInt("status", -1));
-					String tableString = "" + ((tableID-1)%17+1);
+					String tableString = "" + ((tableID - 1) % 17 + 1);
 					if (tableID > 17 && tableID <= 34)
 						tableString += "B";
 					else if (tableID > 34)
