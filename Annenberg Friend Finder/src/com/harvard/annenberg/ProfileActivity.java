@@ -150,7 +150,7 @@ public class ProfileActivity extends Activity {
 
 		UpdateStatusTask upl = new UpdateStatusTask();
 		upl.execute(UPDATE_URL);
-
+		
 	}
 
 	public void getStatus() {
@@ -178,7 +178,7 @@ public class ProfileActivity extends Activity {
 
 			try {
 				// Log.v("gsearch","gsearch result with AsyncTask");
-				return ServerDbAdapter.connectToServer(url, parameters);
+				return updateStatus(url, parameters);
 				// return "SUCCESS";
 				// return downloadImage(url);
 			} catch (Exception e) {
@@ -219,6 +219,9 @@ public class ProfileActivity extends Activity {
 				status = status.trim();
 				Log.v("STATUS", "Status is: " + status);
 				if (status.equals("OK")) {
+
+					Calendar c = Calendar.getInstance();
+					timeOfUpdate = c.getTime().toString().split(" ")[3];
 					String message = "Status updated!";
 					showFinalAlert(message);
 					return;
@@ -233,6 +236,75 @@ public class ProfileActivity extends Activity {
 			}
 
 		}
+
+		public String updateStatus(String serverUrl,
+				Hashtable<String, String> params) {
+			try {
+
+				// Log.v("serverUrl", serverUrl);
+				URL url = new URL(serverUrl);
+				HttpURLConnection con = (HttpURLConnection) url
+						.openConnection();
+				con.setDoInput(true);
+				con.setDoOutput(true);
+				con.setUseCaches(false);
+				con.setRequestMethod("POST");
+				con.setRequestProperty("Connection", "Keep-Alive");
+				String postString = "";
+
+				Enumeration<String> keys = params.keys();
+				String key, val;
+				while (keys.hasMoreElements()) {
+					key = keys.nextElement().toString();
+					// Log.v("KEY", key);
+					val = params.get(key);
+					// Log.v("VAL", val);
+					postString += key + "=" + URLEncoder.encode(val, "UTF-8")
+							+ "&";
+				}
+				postString = postString.substring(0, postString.length() - 1);
+				Log.v("postString", postString);
+				con.setRequestProperty("Content-Length",
+						"" + Integer.toString(postString.getBytes().length));
+				con.setRequestProperty("Content-Type",
+						"application/x-www-form-urlencoded");
+				DataOutputStream dos = new DataOutputStream(
+						con.getOutputStream());
+				dos.writeBytes(postString);
+				dos.flush();
+				dos.close();
+				// Responses from the server (code and message)
+				int serverResponseCode = con.getResponseCode();
+				Log.v("CODE", String.valueOf(serverResponseCode));
+				String serverResponseMessage = con.getResponseMessage();
+				Log.v("PAGE", serverResponseMessage);
+
+				BufferedReader rd = new BufferedReader(new InputStreamReader(
+						con.getInputStream()));
+				String line;
+				StringBuffer response = new StringBuffer();
+				while ((line = rd.readLine()) != null) {
+					response.append(line);
+					response.append('\r');
+				}
+				rd.close();
+				String json = response.toString();
+				return json;
+
+			} catch (MalformedURLException me) {
+				Log.v("MalformedURLException", me.toString());
+				return null;
+			} catch (IOException ie) {
+				Log.v("IOException", ie.toString());
+				return null;
+
+			} catch (Exception e) {
+				Log.v("Exception", e.toString());
+				return null;
+				// Log.e("HREQ", "Exception: "+e.toString());
+			}
+		}
+
 	};
 
 	private void showFinalAlert(CharSequence message) {
@@ -272,9 +344,8 @@ public class ProfileActivity extends Activity {
 			try {
 				// displayMsg();
 				// displayImage(resultbm);
-				// mProgressDialog.dismiss();
+//				mProgressDialog.dismiss();
 				showUploadSuccess(result);
-				s.setSelection(currentSelection - 1);
 
 				// Log.v("Ringtone","Ringtone Path:"+resultbm);
 
