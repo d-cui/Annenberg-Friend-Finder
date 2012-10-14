@@ -274,6 +274,7 @@ public class ProfileActivity extends Activity {
 				// displayImage(resultbm);
 				// mProgressDialog.dismiss();
 				showUploadSuccess(result);
+				s.setSelection(currentSelection - 1);
 
 				// Log.v("Ringtone","Ringtone Path:"+resultbm);
 
