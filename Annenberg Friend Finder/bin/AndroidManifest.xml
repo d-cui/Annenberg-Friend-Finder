@@ -15,6 +15,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".TitlePageActivity"
+            android:configChanges="orientation"
             android:label="@string/title_activity_log_in" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -84,6 +85,11 @@
         </activity>
         <activity
             android:name=".RecipeActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_log_in" >
+        </activity>
+        <activity
+            android:name=".CalendarActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_log_in" >
         </activity>
