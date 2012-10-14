@@ -45,6 +45,9 @@ public class ProfileActivity extends Activity {
 	private Spinner s;
 
 	private String timeOfUpdate;
+	private TextView table;
+
+	private int tableNum;
 
 	public static final String UPDATE_URL = "http://mgm.funformobile.com/aff/updateIsEating.php";
 	public static final String GET_URL = "http://mgm.funformobile.com/aff/getStatus.php";
@@ -56,6 +59,7 @@ public class ProfileActivity extends Activity {
 		// Update Name and HUID
 		TextView name = (TextView) findViewById(R.id.profile_name);
 		name.setText(prefs.getString("n", ""));
+		table = (TextView) findViewById(R.id.profile_table);
 		TextView huid = (TextView) findViewById(R.id.profile_HUID);
 		huid.setText(prefs.getString("huid", ""));
 
@@ -375,10 +379,10 @@ public class ProfileActivity extends Activity {
 					timeOfUpdate = object.getString("time").split(" ")[1];
 					prefs.edit().putInt("status", currentSelection - 1)
 							.commit();
+					tableNum = object.getInt("table");
 
 					if (prefs.getInt("status", -1) != -1)
 						s.setSelection(prefs.getInt("status", -1));
-
 				} else {
 					Log.v("STATUS", status);
 					String message = status;
