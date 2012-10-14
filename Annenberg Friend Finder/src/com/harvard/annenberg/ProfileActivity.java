@@ -359,19 +359,9 @@ public class ProfileActivity extends Activity {
 		}
 
 		protected void onPostExecute(String result) {
-			// Toast.makeText(this.get, "Your Ringtone has been downloaded",
-			// Toast.LENGTH_LONG).show();
 			try {
-				// displayMsg();
-				// displayImage(resultbm);
-				mProgressDialog.dismiss();
 				showUploadSuccess(result);
-
-				// Log.v("Ringtone","Ringtone Path:"+resultbm);
-
 			} catch (Exception e) {
-				// Log.v("Exception google search","Exception:"+e.getMessage());
-
 			}
 
 		}
