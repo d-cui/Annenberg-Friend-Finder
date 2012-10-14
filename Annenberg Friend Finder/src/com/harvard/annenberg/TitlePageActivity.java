@@ -115,7 +115,9 @@ public class TitlePageActivity extends Activity {
 	private View.OnClickListener scheduleListener = new View.OnClickListener() {
 
 		public void onClick(View v) {
-			// Todo
+			Intent currentIntent = new Intent(TitlePageActivity.this,
+					CalendarActivity.class);
+			startActivity(currentIntent);
 		}
 
 	};
