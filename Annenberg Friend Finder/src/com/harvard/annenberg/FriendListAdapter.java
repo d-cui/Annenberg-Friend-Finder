@@ -64,7 +64,6 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 	}
 
 	public long getChildId(int arg0, int arg1) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -90,15 +89,16 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 				childHolder = (RequestChildHolder) arg3.getTag();
 			}
 			childHolder.name.setText(children.get(arg0).get(arg1).get("name"));
-			childHolder.HUID.setText(children.get(arg0).get(arg1).get("HUID"));
+			childHolder.HUID.setText("HUID: "
+					+ children.get(arg0).get(arg1).get("HUID"));
 			childHolder.img.setImageURI(Uri.parse(children.get(arg0).get(arg1)
 					.get("img")));
 			return arg3;
 		}
 		PersonChildHolder childHolder;
 		if (arg3 == null || arg3.getTag() instanceof RequestChildHolder) {
-			arg3 = LayoutInflater.from(mContext).inflate(
-					R.layout.person_row, null);
+			arg3 = LayoutInflater.from(mContext).inflate(R.layout.person_row,
+					null);
 
 			childHolder = new PersonChildHolder();
 			childHolder.name = (TextView) arg3.findViewById(R.id.person_name);
@@ -112,11 +112,25 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 			childHolder = (PersonChildHolder) arg3.getTag();
 		}
 		childHolder.name.setText(children.get(arg0).get(arg1).get("name"));
-		childHolder.status.setText(children.get(arg0).get(arg1).get("status"));
+		int statusID = Integer.parseInt(children.get(arg0).get(arg1)
+				.get("status"));
+		String status = "";
+		if (statusID == 1) {
+			status = "N/A";
+		}
+		if (statusID == 2) {
+			status = "In line";
+		}
+		if (statusID == 3)
+			status = "Eating";
+		childHolder.status.setText(status);
+
 		childHolder.img.setImageURI(Uri.parse(children.get(arg0).get(arg1)
 				.get("img")));
-		childHolder.table.setText(children.get(arg0).get(arg1).get("table"));
-		childHolder.time.setText(children.get(arg0).get(arg1).get("time"));
+		childHolder.table.setText("Table: "
+				+ children.get(arg0).get(arg1).get("table"));
+		childHolder.time.setText("Last check-in: "
+				+ children.get(arg0).get(arg1).get("time"));
 		return arg3;
 
 	}
