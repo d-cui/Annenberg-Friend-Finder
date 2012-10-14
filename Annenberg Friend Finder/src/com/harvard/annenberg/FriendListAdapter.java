@@ -73,7 +73,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 
 		if (arg0 == 0) {
 			RequestChildHolder childHolder;
-			if (arg3 == null) {
+			if (arg3 == null || arg3.getTag() instanceof PersonChildHolder) {
 				// Friend Request
 				arg3 = LayoutInflater.from(mContext).inflate(
 						R.layout.friend_req_row, null);
@@ -96,7 +96,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 			return arg3;
 		}
 		PersonChildHolder childHolder;
-		if (arg3 == null) {
+		if (arg3 == null || arg3.getTag() instanceof RequestChildHolder) {
 			arg3 = LayoutInflater.from(mContext).inflate(
 					R.layout.person_row, null);
 
