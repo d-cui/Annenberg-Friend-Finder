@@ -124,7 +124,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 		if (statusID == 3) {
 			status = "Eating";
 		}
-		childHolder.status.setText("Status: "+status + " ");
+		childHolder.status.setText("Status: " + status + " ");
 
 		childHolder.img.setImageURI(Uri.parse(children.get(arg0).get(arg1)
 				.get("img")));
@@ -135,6 +135,8 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 			table += "B";
 		else if (tableID > 34)
 			table += "C";
+		else if (tableID == 0)
+			table = "N/A";
 		else
 			table += "A";
 		childHolder.table.setText("Table: " + table + " ");
