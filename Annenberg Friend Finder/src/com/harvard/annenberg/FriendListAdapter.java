@@ -121,14 +121,23 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 		if (statusID == 2) {
 			status = "In line";
 		}
-		if (statusID == 3)
+		if (statusID == 3) {
 			status = "Eating";
-		childHolder.status.setText(status);
+		}
+		childHolder.status.setText("Status: "+status + " ");
 
 		childHolder.img.setImageURI(Uri.parse(children.get(arg0).get(arg1)
 				.get("img")));
-		childHolder.table.setText("Table: "
-				+ children.get(arg0).get(arg1).get("table"));
+		int tableID = Integer.parseInt(children.get(arg0).get(arg1)
+				.get("table"));
+		String table = "" + tableID;
+		if (tableID > 17 && tableID <= 34)
+			table += "B";
+		else if (tableID > 34)
+			table += "C";
+		else
+			table += "A";
+		childHolder.table.setText("Table: " + table + " ");
 		childHolder.time.setText("Last check-in: "
 				+ children.get(arg0).get(arg1).get("time"));
 		return arg3;
