@@ -28,8 +28,10 @@ import android.widget.TextView;
 public class AnnenbergActivity extends Activity {
 
 	private static final String CHECKIN_URL = "http://mgm.funformobile.com/aff/checkIn.php";
+	public static final String UPDATE_URL = "http://mgm.funformobile.com/aff/updateIsEating.php";
 	private ProgressDialog mProgressDialog;
 	private Hashtable<String, String> parameters;
+	private SharedPreferences prefs;
 	private CountDownTimer curTimer;
 	private ImageView annenbergImg;
 	float mx;
@@ -47,8 +49,8 @@ public class AnnenbergActivity extends Activity {
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-
 		super.onCreate(savedInstanceState);
+		prefs = getSharedPreferences("AFF", MODE_PRIVATE);
 		mx = 0.0f;
 		my = 0.0f;
 		topLeftX = 0.0f;
@@ -174,15 +176,15 @@ public class AnnenbergActivity extends Activity {
 						// DO SOMETING WITH TABLE CLICK
 						final SharedPreferences prefs = getSharedPreferences(
 								"AFF", MODE_PRIVATE);
-						int HUID = prefs.getInt("HUID", 0);
-						if (HUID == 0) {
+						String HUID = prefs.getString("huid", "");
+						if (HUID.equals("")) {
 							// HOLY SHIT
 							showFinalAlert("Could not determine HUID - Please log in again");
 						} else {
 							if (curTimer != null) {
 								curTimer.cancel();
 							}
-							checkIn("" + HUID, "" + tableId);
+							checkIn(HUID, String.valueOf(tableId));
 							curTimer = new CountDownTimer(1000 * 60 * 120,
 									1000 * 60 * 30) {
 
@@ -196,7 +198,8 @@ public class AnnenbergActivity extends Activity {
 								@Override
 								public void onFinish() {
 									// Check them out.
-									
+									updateStatus();
+
 								}
 							};
 						}
@@ -300,4 +303,73 @@ public class AnnenbergActivity extends Activity {
 							}
 						}).setCancelable(false).show();
 	}
+
+	// Fix status
+	public void updateStatus() {
+		parameters = new Hashtable<String, String>();
+
+		parameters.put("huid", prefs.getString("huid", ""));
+		parameters.put("eatStatus", "N");
+		parameters.put("state", "1");
+
+		UpdateStatusTask upl = new UpdateStatusTask();
+		upl.execute(UPDATE_URL);
+
+	}
+
+	private class UpdateStatusTask extends AsyncTask<String, Integer, String> {
+
+		protected String doInBackground(String... searchKey) {
+
+			String url = searchKey[0];
+
+			try {
+				// Log.v("gsearch","gsearch result with AsyncTask");
+				return ServerDbAdapter.connectToServer(url, parameters);
+				// return "SUCCESS";
+				// return downloadImage(url);
+			} catch (Exception e) {
+				// Log.v("Exception google search","Exception:"+e.getMessage());
+				return null;
+
+			}
+		}
+
+		protected void onPostExecute(String result) {
+			try {
+				showUploadSuccess(result);
+			} catch (Exception e) {
+
+			}
+
+		}
+
+		public void showUploadSuccess(String json) {
+			Log.v("JSON", json);
+			if (json == null) {
+				String message = "An network error has occured. Please try again later";
+				showFinalAlert(message);
+				return;
+			}
+			try {
+				JSONObject object = new JSONObject(json);
+				String status = object.getString("status");
+				status = status.trim();
+				Log.v("STATUS", "Status is: " + status);
+				if (status.equals("OK")) {
+					String message = "Status updated!";
+					showFinalAlert(message);
+					return;
+
+				} else {
+					Log.v("STATUS", status);
+					String message = status;
+					showFinalAlert(message);
+				}
+			} catch (Exception e) {
+
+			}
+
+		}
+	};
 }
