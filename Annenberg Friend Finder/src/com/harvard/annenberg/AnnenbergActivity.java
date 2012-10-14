@@ -207,8 +207,6 @@ public class AnnenbergActivity extends Activity {
 
 								}
 							};
-							
-							finish();
 						}
 					}
 					break;
@@ -254,6 +252,7 @@ public class AnnenbergActivity extends Activity {
 			try {
 				mProgressDialog.dismiss();
 				showUploadSuccess(result);
+				AnnenbergActivity.this.finish();
 
 			} catch (Exception e) {
 
