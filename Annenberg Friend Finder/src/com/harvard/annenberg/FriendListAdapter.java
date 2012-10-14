@@ -2,6 +2,7 @@ package com.harvard.annenberg;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 import android.content.Context;
 import android.net.Uri;
@@ -140,8 +141,15 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 		else
 			table += "A";
 		childHolder.table.setText("Table: " + table + " ");
-		childHolder.time.setText("Last check-in: "
-				+ children.get(arg0).get(arg1).get("time"));
+		String time = children.get(arg0).get(arg1).get("time");
+		if (time.equals("null")) {
+			time = "None";
+		} else {
+			StringTokenizer st = new StringTokenizer(time);
+			st.nextToken();
+			time = st.nextToken();
+		}
+		childHolder.time.setText("Last check-in: " + time);
 		return arg3;
 
 	}
