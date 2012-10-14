@@ -47,7 +47,7 @@ public class ProfileActivity extends Activity {
 	private String timeOfUpdate;
 	private TextView table;
 
-	private int tableNum;
+	private int tableID;
 
 	public static final String UPDATE_URL = "http://mgm.funformobile.com/aff/updateIsEating.php";
 	public static final String GET_URL = "http://mgm.funformobile.com/aff/getStatus.php";
@@ -379,10 +379,20 @@ public class ProfileActivity extends Activity {
 					timeOfUpdate = object.getString("time").split(" ")[1];
 					prefs.edit().putInt("status", currentSelection - 1)
 							.commit();
-					tableNum = object.getInt("table");
+					tableID = object.getInt("table");
 
 					if (prefs.getInt("status", -1) != -1)
 						s.setSelection(prefs.getInt("status", -1));
+					String tableString = "" + ((tableID-1)%17+1);
+					if (tableID > 17 && tableID <= 34)
+						tableString += "B";
+					else if (tableID > 34)
+						tableString += "C";
+					else if (tableID == 0)
+						tableString = "N/A";
+					else
+						tableString += "A";
+					table.setText(tableString);
 				} else {
 					Log.v("STATUS", status);
 					String message = status;
