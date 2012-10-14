@@ -39,7 +39,7 @@ public class PersonAdapter extends ArrayAdapter {
 		((TextView) view.findViewById(R.id.person_status)).setText("Status: "
 				+ status + " ");
 		int tableID = Integer.parseInt(people.get(position).getTable());
-		String table = "" + (tableID-1)%17+1;
+		String table = "" + ((tableID-1)%17+1);
 		if (tableID > 17 && tableID <= 34)
 			table += "B";
 		else if (tableID > 34)

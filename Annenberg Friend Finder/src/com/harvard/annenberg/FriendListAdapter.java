@@ -131,7 +131,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 				.get("img")));
 		int tableID = Integer.parseInt(children.get(arg0).get(arg1)
 				.get("table"));
-		String table = "" + (tableID-1)%17+1;
+		String table = "" + ((tableID-1)%17+1);
 		if (tableID > 17 && tableID <= 34)
 			table += "B";
 		else if (tableID > 34)
