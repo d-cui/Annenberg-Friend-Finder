@@ -10,6 +10,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -198,6 +199,9 @@ public class AnnenbergActivity extends Activity {
 								@Override
 								public void onFinish() {
 									// Check them out.
+									SharedPreferences prefs = getSharedPreferences(
+											"AFF", 0);
+									Editor e = prefs.edit();
 									updateStatus();
 
 								}
