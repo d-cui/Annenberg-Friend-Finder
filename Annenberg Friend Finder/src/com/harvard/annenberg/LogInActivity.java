@@ -25,8 +25,10 @@ import android.database.Cursor;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
 
@@ -41,8 +43,12 @@ public class LogInActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		prefs = getSharedPreferences("AFF", MODE_PRIVATE);
 		setContentView(R.layout.log_in);
+
+		TextView loginTitle = (TextView) findViewById(R.id.loginTitle);
+		loginTitle.setText("Log In");
 		Button logInButton = (Button) findViewById(R.id.login_go);
 		logInButton.setOnClickListener(new OnClickListener() {
 

@@ -107,7 +107,7 @@ public final class R {
         public static final int add_new_friend=0x7f090008;
         public static final int allList=0x7f090000;
         public static final int annenberg__img=0x7f090001;
-        public static final int bottomTitleBar=0x7f09002c;
+        public static final int bottomTitleBar=0x7f09002d;
         public static final int category=0x7f090003;
         public static final int check_in=0x7f09001b;
         public static final int indicator=0x7f090002;
@@ -118,8 +118,8 @@ public final class R {
         public static final int login_HUID=0x7f09000b;
         public static final int login_go=0x7f09000d;
         public static final int login_password=0x7f09000c;
-        public static final int master_row=0x7f09002f;
-        public static final int menu_settings=0x7f090033;
+        public static final int master_row=0x7f090030;
+        public static final int menu_settings=0x7f090034;
         public static final int mollieKatzen=0x7f090020;
         public static final int name=0x7f090024;
         public static final int organic=0x7f090022;
@@ -141,20 +141,21 @@ public final class R {
         public static final int request_image=0x7f090004;
         public static final int request_name=0x7f090005;
         public static final int signup=0x7f09000e;
-        public static final int signup_HUID=0x7f090025;
-        public static final int signup_name=0x7f090026;
-        public static final int signup_password=0x7f090027;
-        public static final int signup_password_confirm=0x7f090028;
-        public static final int signup_submit=0x7f090029;
-        public static final int title_friendfinder=0x7f090030;
-        public static final int title_login_image=0x7f09002e;
-        public static final int title_menu=0x7f090031;
-        public static final int title_schedule=0x7f090032;
-        public static final int title_title=0x7f09002b;
-        public static final int title_titleBar=0x7f09002a;
+        public static final int signupTitle=0x7f090025;
+        public static final int signup_HUID=0x7f090026;
+        public static final int signup_name=0x7f090027;
+        public static final int signup_password=0x7f090028;
+        public static final int signup_password_confirm=0x7f090029;
+        public static final int signup_submit=0x7f09002a;
+        public static final int title_friendfinder=0x7f090031;
+        public static final int title_login_image=0x7f09002f;
+        public static final int title_menu=0x7f090032;
+        public static final int title_schedule=0x7f090033;
+        public static final int title_title=0x7f09002c;
+        public static final int title_titleBar=0x7f09002b;
         public static final int vegan=0x7f09001f;
         public static final int vegetarian=0x7f09001e;
-        public static final int welcomeTitle=0x7f09002d;
+        public static final int welcomeTitle=0x7f09002e;
     }
     public static final class layout {
         public static final int activity_log_in=0x7f030000;
