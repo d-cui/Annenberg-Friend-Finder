@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -170,7 +171,15 @@ public class AnnenbergActivity extends Activity {
 						}
 
 						// DO SOMETING WITH TABLE CLICK
-
+						final SharedPreferences prefs = getSharedPreferences(
+								"AFF", MODE_PRIVATE);
+						int HUID = prefs.getInt("HUID", 0);
+						if (HUID == 0) {
+							// HOLY SHIT
+							showFinalAlert("Could not determine HUID - Please log in again");
+						} else {
+							checkIn("" + HUID, "" + tableId);
+						}
 					}
 					break;
 				}

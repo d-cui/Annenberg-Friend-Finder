@@ -140,14 +140,14 @@ public final class R {
         public static final int request_huid=0x7f090006;
         public static final int request_image=0x7f090004;
         public static final int request_name=0x7f090005;
-        public static final int row_one=0x7f090031;
+        public static final int row_one=0x7f090030;
         public static final int signup=0x7f09000e;
         public static final int signup_HUID=0x7f090025;
         public static final int signup_name=0x7f090026;
         public static final int signup_password=0x7f090027;
         public static final int signup_password_confirm=0x7f090028;
         public static final int signup_submit=0x7f090029;
-        public static final int title_friendfinder=0x7f090030;
+        public static final int title_friendfinder=0x7f090031;
         public static final int title_login_image=0x7f09002e;
         public static final int title_menu=0x7f090032;
         public static final int title_schedule=0x7f090033;
