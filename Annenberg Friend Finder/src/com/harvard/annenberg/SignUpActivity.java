@@ -44,7 +44,7 @@ public class SignUpActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.sign_up);
 		TextView signUpTitle = (TextView) findViewById(R.id.signupTitle);
-		signUpTitle.setText("Sign In");
+		signUpTitle.setText("Sign Up");
 		
 		Button signUpButton = (Button) findViewById(R.id.signup_submit);
 		signUpButton.setOnClickListener(new OnClickListener() {

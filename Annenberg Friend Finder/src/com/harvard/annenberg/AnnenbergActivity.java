@@ -50,6 +50,7 @@ public class AnnenbergActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		prefs = getSharedPreferences("AFF", MODE_PRIVATE);
 		mx = 0.0f;
 		my = 0.0f;
@@ -202,6 +203,8 @@ public class AnnenbergActivity extends Activity {
 
 								}
 							};
+							
+							finish();
 						}
 					}
 					break;
@@ -236,29 +239,19 @@ public class AnnenbergActivity extends Activity {
 			String url = searchKey[0];
 
 			try {
-				// Log.v("gsearch","gsearch result with AsyncTask");
 				return ServerDbAdapter.connectToServer(url, parameters);
-				// return "SUCCESS";
-				// return downloadImage(url);
 			} catch (Exception e) {
-				// Log.v("Exception google search","Exception:"+e.getMessage());
 				return null;
 
 			}
 		}
 
 		protected void onPostExecute(String result) {
-			// Toast.makeText(this.get, "Your Ringtone has been downloaded",
-			// Toast.LENGTH_LONG).show();
 			try {
-				// displayMsg();
-				// displayImage(resultbm);
 				mProgressDialog.dismiss();
 				showUploadSuccess(result);
-				// Log.v("Ringtone","Ringtone Path:"+resultbm);
 
 			} catch (Exception e) {
-				// Log.v("Exception google search","Exception:"+e.getMessage());
 
 			}
 
@@ -293,7 +286,7 @@ public class AnnenbergActivity extends Activity {
 
 	private void showFinalAlert(CharSequence message) {
 		new AlertDialog.Builder(AnnenbergActivity.this)
-				.setTitle("Error")
+				.setTitle("Notice")
 				.setMessage(message)
 				.setPositiveButton("Okay",
 						new DialogInterface.OnClickListener() {
