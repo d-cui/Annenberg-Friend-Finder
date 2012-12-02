@@ -48,8 +48,8 @@ public class PersonAdapter extends ArrayAdapter {
 			table = "N/A";
 		else
 			table += "A";
-		((TextView) view.findViewById(R.id.person_table)).setText("Table: "
-				+ table + " ");
+//		((TextView) view.findViewById(R.id.person_table)).setText("Table: "
+//				+ table + " ");
 		String time = people.get(position).getTime();
 		if(time.equals("null")){
 			time = "None";
@@ -60,8 +60,8 @@ public class PersonAdapter extends ArrayAdapter {
 			st.nextToken();
 			time = st.nextToken();
 		}
-		((TextView) view.findViewById(R.id.person_time))
-				.setText("Last check-in: " + time);
+//		((TextView) view.findViewById(R.id.person_time))
+//				.setText("Last check-in: " + time);
 		ImageView i = ((ImageView) view.findViewById(R.id.person_image));
 		String image = people.get(position).getImg();
 		if (image.equals("") == false) {

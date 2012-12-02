@@ -92,6 +92,7 @@ public class FriendListActivity extends Activity {
 
 				final String friendHUID = children.get(0).get(childPosition)
 						.get("HUID");
+				final int position = childPosition;
 
 				AlertDialog.Builder builder = new AlertDialog.Builder(
 						FriendListActivity.this);
@@ -104,9 +105,15 @@ public class FriendListActivity extends Activity {
 								if (which == 0) {
 									acceptFriend(prefs.getString("huid", ""),
 											friendHUID, "Y");
+									
+									children.get(0).remove(position);
+									fla.notifyDataSetChanged();
 								} else if (which == 1) {
 									acceptFriend(prefs.getString("huid", ""),
 											friendHUID, "N");
+									
+									children.get(0).remove(position);
+									fla.notifyDataSetChanged();
 								}
 							}
 						});

@@ -29,6 +29,11 @@
             android:label="@string/title_activity_log_in" >
         </activity>
         <activity
+            android:name=".NewAnnenbergActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_log_in" >
+        </activity>
+        <activity
             android:name=".BreakfastActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_log_in" >

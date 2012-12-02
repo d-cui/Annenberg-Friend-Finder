@@ -1,17 +1,21 @@
 package com.harvard.annenberg;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import org.apache.http.util.ByteArrayBuffer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -22,11 +26,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -44,13 +51,20 @@ public class ProfileActivity extends Activity {
 	private boolean notSet = false;
 	private Spinner s;
 
+	private String mImageUri;
+	private Uri image;
 	private String timeOfUpdate;
+
 	private TextView table;
+	private ImageView mImage;
+	private static byte[] myImage;
 
 	private int tableID;
 
 	public static final String UPDATE_URL = "http://mgm.funformobile.com/aff/updateIsEating.php";
 	public static final String GET_URL = "http://mgm.funformobile.com/aff/getStatus.php";
+
+	public static final int PICKPIC_FROM_ALBUM = 1;
 
 	public void onCreate(Bundle bun) {
 		super.onCreate(bun);
@@ -62,6 +76,8 @@ public class ProfileActivity extends Activity {
 		table = (TextView) findViewById(R.id.profile_table);
 		TextView huid = (TextView) findViewById(R.id.profile_HUID);
 		huid.setText(prefs.getString("huid", ""));
+
+		mImage = (ImageView) findViewById(R.id.profile_image);
 
 		// Image
 		// TODO: Gallery set image stuff.
@@ -104,27 +120,46 @@ public class ProfileActivity extends Activity {
 
 		);
 
+		/**
+		 * Creates listener for the icon.
+		 */
+		mImage.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Intent innerIntent = new Intent(Intent.ACTION_GET_CONTENT);
+				innerIntent.setType("image/*");
+				startActivityForResult(innerIntent, PICKPIC_FROM_ALBUM);
+			}
+		});
+
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		if (resultCode == RESULT_OK) {
-			getStatus();
-			int tableNum = data.getIntExtra("tableNum", tableID);
+			if (requestCode == PICKPIC_FROM_ALBUM && data != null) {
+				image = data.getData();
+				ImgUtil imageUtilities = new ImgUtil(this);
+				byte[] bm = imageUtilities.getResizedImageData(image, 320, 320);
+				Bitmap bmp = BitmapFactory.decodeByteArray(bm, 0, bm.length);
+				mImage.setImageBitmap(bmp);
+				myImage = bm;
+			} else {
+				getStatus();
+				int tableNum = data.getIntExtra("tableNum", tableID);
 
-			String tableString = "" + ((tableNum - 1) % 17 + 1);
-			if (tableNum > 17 && tableNum <= 34)
-				tableString += "B";
-			else if (tableNum > 34)
-				tableString += "C";
-			else if (tableNum == 0)
-				tableString = "N/A";
-			else
-				tableString += "A";
+				String tableString = "" + ((tableNum - 1) % 17 + 1);
+				if (tableNum > 17 && tableNum <= 34)
+					tableString += "B";
+				else if (tableNum > 34)
+					tableString += "C";
+				else if (tableNum == 0)
+					tableString = "N/A";
+				else
+					tableString += "A";
 
-			table.setText(tableString);
-
+				table.setText(tableString);
+			}
 		}
 	}
 
@@ -205,7 +240,7 @@ public class ProfileActivity extends Activity {
 
 			try {
 				// Log.v("gsearch","gsearch result with AsyncTask");
-				return updateStatus(url, parameters);
+				return ServerDbAdapter.connectToServer(url, parameters);
 				// return "SUCCESS";
 				// return downloadImage(url);
 			} catch (Exception e) {
@@ -257,74 +292,6 @@ public class ProfileActivity extends Activity {
 
 		}
 
-		public String updateStatus(String serverUrl,
-				Hashtable<String, String> params) {
-			try {
-
-				// Log.v("serverUrl", serverUrl);
-				URL url = new URL(serverUrl);
-				HttpURLConnection con = (HttpURLConnection) url
-						.openConnection();
-				con.setDoInput(true);
-				con.setDoOutput(true);
-				con.setUseCaches(false);
-				con.setRequestMethod("POST");
-				con.setRequestProperty("Connection", "Keep-Alive");
-				String postString = "";
-
-				Enumeration<String> keys = params.keys();
-				String key, val;
-				while (keys.hasMoreElements()) {
-					key = keys.nextElement().toString();
-					// Log.v("KEY", key);
-					val = params.get(key);
-					// Log.v("VAL", val);
-					postString += key + "=" + URLEncoder.encode(val, "UTF-8")
-							+ "&";
-				}
-				postString = postString.substring(0, postString.length() - 1);
-				Log.v("postString", postString);
-				con.setRequestProperty("Content-Length",
-						"" + Integer.toString(postString.getBytes().length));
-				con.setRequestProperty("Content-Type",
-						"application/x-www-form-urlencoded");
-				DataOutputStream dos = new DataOutputStream(
-						con.getOutputStream());
-				dos.writeBytes(postString);
-				dos.flush();
-				dos.close();
-				// Responses from the server (code and message)
-				int serverResponseCode = con.getResponseCode();
-				Log.v("CODE", String.valueOf(serverResponseCode));
-				String serverResponseMessage = con.getResponseMessage();
-				Log.v("PAGE", serverResponseMessage);
-
-				BufferedReader rd = new BufferedReader(new InputStreamReader(
-						con.getInputStream()));
-				String line;
-				StringBuffer response = new StringBuffer();
-				while ((line = rd.readLine()) != null) {
-					response.append(line);
-					response.append('\r');
-				}
-				rd.close();
-				String json = response.toString();
-				return json;
-
-			} catch (MalformedURLException me) {
-				Log.v("MalformedURLException", me.toString());
-				return null;
-			} catch (IOException ie) {
-				Log.v("IOException", ie.toString());
-				return null;
-
-			} catch (Exception e) {
-				Log.v("Exception", e.toString());
-				return null;
-				// Log.e("HREQ", "Exception: "+e.toString());
-			}
-		}
-
 	};
 
 	private void showFinalAlert(CharSequence message) {
@@ -348,7 +315,7 @@ public class ProfileActivity extends Activity {
 
 			try {
 				// Log.v("gsearch","gsearch result with AsyncTask");
-				return statusGetter(url, parameters);
+				return ServerDbAdapter.connectToServer(url, parameters);
 				// return "SUCCESS";
 				// return downloadImage(url);
 			} catch (Exception e) {
@@ -399,6 +366,9 @@ public class ProfileActivity extends Activity {
 					else
 						tableString += "A";
 					table.setText(tableString);
+
+					ImageDownloader imageGetter = new ImageDownloader();
+					imageGetter.execute(info.getString("imgUri"));
 				} else {
 					Log.v("STATUS", status);
 					String message = status;
@@ -409,74 +379,64 @@ public class ProfileActivity extends Activity {
 			}
 
 		}
+	};
 
-		public String statusGetter(String serverUrl,
-				Hashtable<String, String> params) {
+	private class ImageDownloader extends AsyncTask<String, Integer, byte[]> {
+
+		@Override
+		protected byte[] doInBackground(String... searchKey) {
+
+			String url = searchKey[0];
+
+			if (url.equals(""))
+				return null;
+
+			URL aURL;
 			try {
+				aURL = new URL(url);
 
-				// Log.v("serverUrl", serverUrl);
-				URL url = new URL(serverUrl);
-				HttpURLConnection con = (HttpURLConnection) url
-						.openConnection();
-				con.setDoInput(true);
-				con.setDoOutput(true);
-				con.setUseCaches(false);
-				con.setRequestMethod("POST");
-				con.setRequestProperty("Connection", "Keep-Alive");
-				String postString = "";
-
-				Enumeration<String> keys = params.keys();
-				String key, val;
-				while (keys.hasMoreElements()) {
-					key = keys.nextElement().toString();
-					// Log.v("KEY", key);
-					val = params.get(key);
-					// Log.v("VAL", val);
-					postString += key + "=" + URLEncoder.encode(val, "UTF-8")
-							+ "&";
+				if (myImage != null) {
+					return myImage;
 				}
-				postString = postString.substring(0, postString.length() - 1);
-				Log.v("postString", postString);
-				con.setRequestProperty("Content-Length",
-						"" + Integer.toString(postString.getBytes().length));
-				con.setRequestProperty("Content-Type",
-						"application/x-www-form-urlencoded");
-				DataOutputStream dos = new DataOutputStream(
-						con.getOutputStream());
-				dos.writeBytes(postString);
-				dos.flush();
-				dos.close();
-				// Responses from the server (code and message)
-				int serverResponseCode = con.getResponseCode();
-				Log.v("CODE", String.valueOf(serverResponseCode));
-				String serverResponseMessage = con.getResponseMessage();
-				Log.v("PAGE", serverResponseMessage);
 
-				BufferedReader rd = new BufferedReader(new InputStreamReader(
-						con.getInputStream()));
-				String line;
-				StringBuffer response = new StringBuffer();
-				while ((line = rd.readLine()) != null) {
-					response.append(line);
-					response.append('\r');
+				URLConnection conn = aURL.openConnection();
+				conn.connect();
+				InputStream is = conn.getInputStream();
+				BufferedInputStream bis = new BufferedInputStream(is);
+				ByteArrayBuffer baf = new ByteArrayBuffer(50);
+
+				int current = 0;
+
+				while ((current = bis.read()) != -1) {
+
+					baf.append((byte) current);
+
 				}
-				rd.close();
-				String json = response.toString();
-				return json;
+				is.close();
+				bis.close();
 
-			} catch (MalformedURLException me) {
-				Log.v("MalformedURLException", me.toString());
-				return null;
-			} catch (IOException ie) {
-				Log.v("IOException", ie.toString());
-				return null;
+				byte[] bytes = baf.toByteArray();
+				baf.clear();
+				myImage = bytes;
 
-			} catch (Exception e) {
-				Log.v("Exception", e.toString());
+				return bytes;
+				// adp.notifyDataSetChanged();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 				return null;
-				// Log.e("HREQ", "Exception: "+e.toString());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
 			}
+
 		}
 
+		protected void onPostExecute(byte[] result) {
+			Bitmap bmp = BitmapFactory
+					.decodeByteArray(result, 0, result.length);
+			mImage.setImageBitmap(bmp);
+		}
 	};
 }

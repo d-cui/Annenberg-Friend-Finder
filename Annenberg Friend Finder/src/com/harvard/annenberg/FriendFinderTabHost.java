@@ -71,7 +71,7 @@ public class FriendFinderTabHost extends TabActivity {
 		TabSpec annenbergSpec = tabHost.newTabSpec("Annenberg");
 		annenbergSpec.setIndicator("Annenberg",
 				getResources().getDrawable(R.drawable.dining));
-		Intent annenbergIntent = new Intent(this, AnnenbergActivity.class);
+		Intent annenbergIntent = new Intent(this, NewAnnenbergActivity.class);
 		annenbergIntent.putExtra("STARTCODE", false);
 		annenbergIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		annenbergSpec.setContent(annenbergIntent);

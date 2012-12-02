@@ -1,6 +1,7 @@
 package com.harvard.annenberg;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
@@ -73,65 +74,67 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 
 		if (arg0 == 0) {
 			RequestChildHolder childHolder;
-			if (arg3 == null || arg3.getTag() instanceof PersonChildHolder) {
-				// Friend Request
-				arg3 = LayoutInflater.from(mContext).inflate(
-						R.layout.friend_req_row, null);
+			// if (arg3 == null) {
+			// Friend Request
+			arg3 = LayoutInflater.from(mContext).inflate(
+					R.layout.friend_req_row, null);
 
-				childHolder = new RequestChildHolder();
-				childHolder.HUID = (TextView) arg3
-						.findViewById(R.id.request_huid);
-				childHolder.name = (TextView) arg3
-						.findViewById(R.id.request_name);
-				childHolder.img = (ImageView) arg3
-						.findViewById(R.id.request_image);
-				arg3.setTag(childHolder);
-			} else {
-				childHolder = (RequestChildHolder) arg3.getTag();
-			}
+			childHolder = new RequestChildHolder();
+			childHolder.HUID = (TextView) arg3.findViewById(R.id.request_huid);
+			childHolder.name = (TextView) arg3.findViewById(R.id.request_name);
+			childHolder.img = (ImageView) arg3.findViewById(R.id.request_image);
+			arg3.setTag(childHolder);
+			// } else {
+			// childHolder = (RequestChildHolder) arg3.getTag();
+			// }
+
 			childHolder.name.setText(children.get(arg0).get(arg1).get("name"));
 			childHolder.HUID.setText("HUID: "
 					+ children.get(arg0).get(arg1).get("HUID"));
-			childHolder.img.setImageURI(Uri.parse(children.get(arg0).get(arg1)
-					.get("img")));
+
+			String imgUri = children.get(arg0).get(arg1).get("img");
+
+			if (!imgUri.equals(""))
+				childHolder.img.setImageURI(Uri.parse(children.get(arg0)
+						.get(arg1).get("img")));
 			return arg3;
 		}
 		PersonChildHolder childHolder;
-		if (arg3 == null || arg3.getTag() instanceof RequestChildHolder) {
-			arg3 = LayoutInflater.from(mContext).inflate(R.layout.person_row,
-					null);
+		// if (arg3 == null) {
+		arg3 = LayoutInflater.from(mContext).inflate(R.layout.person_row, null);
 
-			childHolder = new PersonChildHolder();
-			childHolder.name = (TextView) arg3.findViewById(R.id.person_name);
-			childHolder.img = (ImageView) arg3.findViewById(R.id.person_image);
-			childHolder.status = (TextView) arg3
-					.findViewById(R.id.person_status);
-			childHolder.table = (TextView) arg3.findViewById(R.id.person_table);
-			childHolder.time = (TextView) arg3.findViewById(R.id.person_time);
-			arg3.setTag(childHolder);
-		} else {
-			childHolder = (PersonChildHolder) arg3.getTag();
-		}
+		childHolder = new PersonChildHolder();
+		childHolder.name = (TextView) arg3.findViewById(R.id.person_name);
+		childHolder.img = (ImageView) arg3.findViewById(R.id.person_image);
+		childHolder.status = (TextView) arg3.findViewById(R.id.person_status);
+		// childHolder.table = (TextView) arg3.findViewById(R.id.person_table);
+		// childHolder.time = (TextView) arg3.findViewById(R.id.person_time);
+		arg3.setTag(childHolder);
+		// } else {
+		// childHolder = (PersonChildHolder) arg3.getTag();
+		// }
 		childHolder.name.setText(children.get(arg0).get(arg1).get("name"));
 		int statusID = Integer.parseInt(children.get(arg0).get(arg1)
 				.get("status"));
 		String status = "";
+
 		if (statusID == 1) {
-			status = "N/A";
-		}
-		if (statusID == 2) {
+			status = "Not at Annenberg";
+		} else if (statusID == 2) {
 			status = "In line";
-		}
-		if (statusID == 3) {
+		} else {
 			status = "Eating";
 		}
-		childHolder.status.setText("Status: " + status + " ");
 
-		childHolder.img.setImageURI(Uri.parse(children.get(arg0).get(arg1)
-				.get("img")));
+		String imgUri = children.get(arg0).get(arg1).get("img");
+
+		if (!imgUri.equals(""))
+			childHolder.img.setImageURI(Uri.parse(children.get(arg0).get(arg1)
+					.get("img")));
+
 		int tableID = Integer.parseInt(children.get(arg0).get(arg1)
 				.get("table"));
-		String table = "" + ((tableID-1)%17+1);
+		String table = "" + ((tableID - 1) % 17 + 1);
 		if (tableID > 17 && tableID <= 34)
 			table += "B";
 		else if (tableID > 34)
@@ -140,7 +143,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 			table = "N/A";
 		else
 			table += "A";
-		childHolder.table.setText("Table: " + table + " ");
+		// childHolder.table.setText("Table: " + table + " ");
 		String time = children.get(arg0).get(arg1).get("time");
 		if (time.equals("null")) {
 			time = "None";
@@ -149,7 +152,13 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 			st.nextToken();
 			time = st.nextToken();
 		}
-		childHolder.time.setText("Last check-in: " + time);
+
+		if (status.equals("Eating")) {
+			status = "Table " + table + " since " + time;
+		}
+		// childHolder.time.setText("Last check-in: " + time);
+
+		childHolder.status.setText(status);
 		return arg3;
 
 	}

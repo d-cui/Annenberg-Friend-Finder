@@ -127,10 +127,15 @@ public class MenuTabHost extends TabActivity {
 
 		Cursor mCursor = db.fetchFoodByDate(date);
 		mCursor.moveToFirst();
+		
+		//TODO Check if mCursor is null
 
 		while (!mCursor.isAfterLast()) {
 			String meal = mCursor.getString(mCursor
 					.getColumnIndexOrThrow(MenuDbAdapter.KEY_FOOD_MEAL));
+
+			Log.v("MEAL", meal);
+			
 			String category = mCursor.getString(mCursor
 					.getColumnIndexOrThrow(MenuDbAdapter.KEY_FOOD_CATEGORY));
 			String recipe = mCursor.getString(mCursor
