@@ -1,12 +1,23 @@
 package com.harvard.annenberg;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
+import org.apache.http.util.ByteArrayBuffer;
+
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +36,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 	private ArrayList<HashMap<String, String>> groups;
 	private ArrayList<ArrayList<HashMap<String, String>>> children;
 	private int[] groupStatus;
+	private ArrayList<ArrayList<byte[]>> images;
 
 	public FriendListAdapter(Context context,
 			ArrayList<HashMap<String, String>> groups,
@@ -35,6 +47,13 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 
 		this.groups = groups;
 		this.children = child;
+		images = new ArrayList<ArrayList<byte[]>>();
+		for (int i = 0; i < groups.size(); i++) {
+			images.add(new ArrayList<byte[]>());
+			for (int j = 0; j < children.get(i).size(); j++) {
+				images.get(i).add(null);
+			}
+		}
 
 		groupStatus = new int[groups.size()];
 
@@ -71,6 +90,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 
 	public View getChildView(int arg0, int arg1, boolean arg2, View arg3,
 			ViewGroup arg4) {
+		ImageDownloader imgDownloader = new ImageDownloader();
 
 		if (arg0 == 0) {
 			RequestChildHolder childHolder;
@@ -92,11 +112,9 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 			childHolder.HUID.setText("HUID: "
 					+ children.get(arg0).get(arg1).get("HUID"));
 
-			String imgUri = children.get(arg0).get(arg1).get("img");
+			imgDownloader.execute(children.get(arg0).get(arg1).get("HUID"),
+					childHolder.img, (Integer) arg0, (Integer) arg1);
 
-			if (!imgUri.equals(""))
-				childHolder.img.setImageURI(Uri.parse(children.get(arg0)
-						.get(arg1).get("img")));
 			return arg3;
 		}
 		PersonChildHolder childHolder;
@@ -126,11 +144,8 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 			status = "Eating";
 		}
 
-		String imgUri = children.get(arg0).get(arg1).get("img");
-
-		if (!imgUri.equals(""))
-			childHolder.img.setImageURI(Uri.parse(children.get(arg0).get(arg1)
-					.get("img")));
+		imgDownloader.execute(children.get(arg0).get(arg1).get("HUID"),
+				childHolder.img, (Integer) arg0, (Integer) arg1);
 
 		int tableID = Integer.parseInt(children.get(arg0).get(arg1)
 				.get("table"));
@@ -240,4 +255,73 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 		return null;
 	}
 
+	private class ImageDownloader extends AsyncTask<Object, Integer, byte[]> {
+		private String HUID;
+		private ImageView view;
+
+		private Integer groupPos;
+		private Integer childPos;
+
+		@Override
+		protected byte[] doInBackground(Object... searchKey) {
+
+			HUID = (String) searchKey[0];
+			view = (ImageView) searchKey[1];
+			groupPos = (Integer) searchKey[2];
+			childPos = (Integer) searchKey[3];
+
+			if (images.get(groupPos).get(childPos) != null)
+				return images.get(groupPos).get(childPos);
+
+			String urlString = "http://mgm.funformobile.com/aff/img/"
+					+ HUID.trim() + ".jpg";
+			URL aURL;
+			try {
+				aURL = new URL(urlString);
+
+				URLConnection conn = aURL.openConnection();
+				conn.connect();
+				InputStream is = conn.getInputStream();
+				BufferedInputStream bis = new BufferedInputStream(is);
+				ByteArrayBuffer baf = new ByteArrayBuffer(50);
+
+				int current = 0;
+
+				while ((current = bis.read()) != -1) {
+
+					baf.append((byte) current);
+
+				}
+				is.close();
+				bis.close();
+
+				byte[] bytes = baf.toByteArray();
+				baf.clear();
+
+				return bytes;
+				// adp.notifyDataSetChanged();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+
+		}
+
+		protected void onPostExecute(byte[] result) {
+
+			if (result != null) {
+				images.get(groupPos).set(childPos, result);
+				Bitmap bmp = BitmapFactory.decodeByteArray(result, 0,
+						result.length);
+				view.setImageBitmap(bmp);
+			} else {
+				view.setBackgroundResource(R.drawable.defaulticon);
+			}
+		}
+	};
 }

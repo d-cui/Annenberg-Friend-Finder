@@ -150,7 +150,18 @@ public class DbAdapter {
 		vals.put(KEY_SERVER_ID, serverId);
 		vals.put(KEY_PASSWORD, password);
 		return mDb.update(USER_DB_TABLE, vals, KEY_USER_ID + "=" + id, null);
+	}
 
+	public int updateUserImage(int id, String imageUri) {
+
+		String image = "";
+		if (imageUri != null && !imageUri.equals(""))
+			image = imageUri;
+
+		ContentValues vals = new ContentValues();
+		// vals.put(KEY_CONTACT_ID, contactId);
+		vals.put(KEY_USER_IMAGE, image.trim());
+		return mDb.update(USER_DB_TABLE, vals, KEY_USER_ID + "=" + id, null);
 	}
 
 	public Cursor fetchUser(int id) throws SQLException {
@@ -226,7 +237,7 @@ public class DbAdapter {
 	public int updateServerId(int userId, long server_id) {
 		ContentValues vals = new ContentValues();
 		vals.put(KEY_SERVER_ID, server_id);
-		return mDb.update(USER_DB_TABLE, vals, KEY_USER_ID + "=" + userId,
-				null);
+		return mDb
+				.update(USER_DB_TABLE, vals, KEY_USER_ID + "=" + userId, null);
 	}
 }

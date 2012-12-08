@@ -43,4 +43,9 @@ public class Person {
 		return time;
 	}
 
+	public boolean equals(Object o) {
+		Person person = (Person) o;
+		return this.getHUID() == person.getHUID();
+	}
+
 }

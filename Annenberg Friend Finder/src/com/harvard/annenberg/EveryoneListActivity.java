@@ -168,6 +168,7 @@ public class EveryoneListActivity extends Activity {
 		}
 
 	};
+	
 
 	private void showFinalAlert(CharSequence message) {
 		new AlertDialog.Builder(EveryoneListActivity.this)

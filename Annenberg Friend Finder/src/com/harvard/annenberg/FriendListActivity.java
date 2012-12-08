@@ -1,29 +1,48 @@
 package com.harvard.annenberg;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.StringTokenizer;
 
+import org.apache.http.util.ByteArrayBuffer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupCollapseListener;
+import android.widget.ExpandableListView.OnGroupExpandListener;
 
 public class FriendListActivity extends Activity {
 	private FriendListAdapter fla;
@@ -56,6 +75,26 @@ public class FriendListActivity extends Activity {
 		fetchReq(prefs.getString("huid", ""));
 		expListView = (ExpandableListView) findViewById(android.R.id.list);
 		expListView.setOnChildClickListener(reqListener);
+		expListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+					int groupPosition = ExpandableListView
+							.getPackedPositionGroup(id);
+					int childPosition = ExpandableListView
+							.getPackedPositionChild(id);
+
+					// You now have everything that you would as if this was an
+					// OnChildClickListener()
+					// Add your logic here.
+
+					// Return true as we are handling the event.
+					return true;
+				}
+
+				return false;
+			}
+		});
 		expListView.setGroupIndicator(null);
 
 		ImageView b = (ImageView) findViewById(R.id.add_new_friend);
@@ -105,13 +144,13 @@ public class FriendListActivity extends Activity {
 								if (which == 0) {
 									acceptFriend(prefs.getString("huid", ""),
 											friendHUID, "Y");
-									
+
 									children.get(0).remove(position);
 									fla.notifyDataSetChanged();
 								} else if (which == 1) {
 									acceptFriend(prefs.getString("huid", ""),
 											friendHUID, "N");
-									
+
 									children.get(0).remove(position);
 									fla.notifyDataSetChanged();
 								}
@@ -119,6 +158,8 @@ public class FriendListActivity extends Activity {
 						});
 				builder.create();
 				builder.show();
+			} else {
+
 			}
 			return true;
 		}
@@ -167,11 +208,12 @@ public class FriendListActivity extends Activity {
 		ArrayList<HashMap<String, String>> friendChildren = new ArrayList<HashMap<String, String>>();
 		for (Person f : friends) {
 			HashMap<String, String> h = new HashMap<String, String>();
-			h.put("name", f.name);
-			h.put("img", f.img);
-			h.put("status", f.status);
-			h.put("table", f.table);
-			h.put("time", f.time);
+			h.put("HUID", f.getHUID() + "");
+			h.put("name", f.getName());
+			h.put("img", f.getImg());
+			h.put("status", f.getStatus());
+			h.put("table", f.getTable());
+			h.put("time", f.getTime());
 			friendChildren.add(h);
 		}
 		result.add(friendChildren);
@@ -353,7 +395,7 @@ public class FriendListActivity extends Activity {
 				// Log.v("Ringtone","Ringtone Path:"+resultbm);
 
 			} catch (Exception e) {
-				// Log.v("Exception google search","Exception:"+e.getMessage());
+				Log.v("Exception google search", "Exception:" + e.getMessage());
 
 			}
 
@@ -531,13 +573,12 @@ public class FriendListActivity extends Activity {
 			} catch (Exception e) {
 
 			}
-
 		}
 	};
 
 	private void showFinalAlert(CharSequence message) {
 		new AlertDialog.Builder(FriendListActivity.this)
-				.setTitle("Error")
+				.setTitle("Notice")
 				.setMessage(message)
 				.setPositiveButton("Okay",
 						new DialogInterface.OnClickListener() {

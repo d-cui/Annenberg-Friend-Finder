@@ -122,7 +122,6 @@ public class TitlePageActivity extends Activity {
 
 	};
 
-
 	private View.OnClickListener logStatusListener = new View.OnClickListener() {
 
 		public void onClick(View v) {

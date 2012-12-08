@@ -58,6 +58,7 @@ public class ProfileActivity extends Activity {
 	private TextView table;
 	private ImageView mImage;
 	private static byte[] myImage;
+	private static String sessionId;
 
 	private int tableID;
 
@@ -78,6 +79,12 @@ public class ProfileActivity extends Activity {
 		huid.setText(prefs.getString("huid", ""));
 
 		mImage = (ImageView) findViewById(R.id.profile_image);
+
+		String aURL = "http://mgm.funformobile.com/aff/img/"
+				+ prefs.getString("huid", "").trim() + ".jpg";
+
+		ImageDownloader imgDownloader = new ImageDownloader();
+		imgDownloader.execute(aURL);
 
 		// Image
 		// TODO: Gallery set image stuff.
@@ -111,7 +118,7 @@ public class ProfileActivity extends Activity {
 
 			public void onClick(View v) {
 				Intent i = new Intent(ProfileActivity.this,
-						AnnenbergActivity.class);
+						NewAnnenbergActivity.class);
 				i.putExtra("STARTCODE", true);
 				startActivityForResult(i, 0);
 
@@ -144,21 +151,24 @@ public class ProfileActivity extends Activity {
 				Bitmap bmp = BitmapFactory.decodeByteArray(bm, 0, bm.length);
 				mImage.setImageBitmap(bmp);
 				myImage = bm;
+
+				UploadTask uploader = new UploadTask(this);
+				uploader.doUpload(prefs.getString("huid", ""), image);
 			} else {
 				getStatus();
-				int tableNum = data.getIntExtra("tableNum", tableID);
-
-				String tableString = "" + ((tableNum - 1) % 17 + 1);
-				if (tableNum > 17 && tableNum <= 34)
-					tableString += "B";
-				else if (tableNum > 34)
-					tableString += "C";
-				else if (tableNum == 0)
-					tableString = "N/A";
-				else
-					tableString += "A";
-
-				table.setText(tableString);
+//				int tableNum = data.getIntExtra("tableNum", tableID);
+//
+//				String tableString = "" + ((tableNum - 1) % 17 + 1);
+//				if (tableNum > 17 && tableNum <= 34)
+//					tableString += "B";
+//				else if (tableNum > 34)
+//					tableString += "C";
+//				else if (tableNum == 0)
+//					tableString = "N/A";
+//				else
+//					tableString += "A";
+//
+//				table.setText(tableString);
 			}
 		}
 	}
@@ -216,14 +226,6 @@ public class ProfileActivity extends Activity {
 	}
 
 	public void getStatus() {
-		// mProgressDialog = new ProgressDialog(this);
-		// mProgressDialog.setTitle("Updating Status");
-		// mProgressDialog.setMessage("Updating Status, Please Wait");
-		// mProgressDialog.setIndeterminate(true);
-		//
-		// mProgressDialog.setCancelable(false);
-		//
-		// mProgressDialog.show();
 		parameters = new Hashtable<String, String>();
 
 		parameters.put("huid", prefs.getString("huid", ""));
@@ -368,7 +370,9 @@ public class ProfileActivity extends Activity {
 					table.setText(tableString);
 
 					ImageDownloader imageGetter = new ImageDownloader();
-					imageGetter.execute(info.getString("imgUri"));
+					String aURL = "http://mgm.funformobile.com/aff/img/"
+							+ prefs.getString("huid", "").trim() + ".jpg";
+					imageGetter.execute(aURL);
 				} else {
 					Log.v("STATUS", status);
 					String message = status;
@@ -395,7 +399,11 @@ public class ProfileActivity extends Activity {
 			try {
 				aURL = new URL(url);
 
-				if (myImage != null) {
+				if (sessionId != null)
+					Log.v("Session", sessionId);
+				Log.v("HUID", prefs.getString("huid", ""));
+				if (myImage != null
+						&& prefs.getString("huid", "").equals(sessionId)) {
 					return myImage;
 				}
 
@@ -434,9 +442,13 @@ public class ProfileActivity extends Activity {
 		}
 
 		protected void onPostExecute(byte[] result) {
-			Bitmap bmp = BitmapFactory
-					.decodeByteArray(result, 0, result.length);
-			mImage.setImageBitmap(bmp);
+			sessionId = prefs.getString("huid", "");
+			if (result != null) {
+				Bitmap bmp = BitmapFactory.decodeByteArray(result, 0,
+						result.length);
+				myImage = result;
+				mImage.setImageBitmap(bmp);
+			}
 		}
 	};
 }

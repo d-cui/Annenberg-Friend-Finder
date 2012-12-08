@@ -1,20 +1,12 @@
 package com.harvard.annenberg;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -26,6 +18,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -36,14 +31,18 @@ public class LogInActivity extends Activity {
 	private SharedPreferences prefs;
 
 	public static final String LOGIN_URL = "http://mgm.funformobile.com/aff/SignIn.php";
+	public static final String LOGIN_URL2 = "http://mgm.funformobile.com/aff/login.php";
 
 	private Hashtable<String, String> parameters;
 	private ProgressDialog mProgressDialog;
+	private WebView webView;
 
+	@SuppressLint("SetJavaScriptEnabled")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		requestWindowFeature(Window.FEATURE_PROGRESS);
 		prefs = getSharedPreferences("AFF", MODE_PRIVATE);
 		setContentView(R.layout.log_in);
 
@@ -72,6 +71,27 @@ public class LogInActivity extends Activity {
 				finish();
 			}
 		});
+
+		// this.webView = new WebView(this);
+		// this.webView.clearCache(true); // !!!
+		// setContentView(this.webView);
+		//
+		// this.webView.loadUrl(LOGIN_URL2);
+		// this.webView.getSettings().setJavaScriptEnabled(true);
+		// this.webView.setWebChromeClient(new WebChromeClient() {
+		// // Show loading progress in activity's title bar.
+		// @Override
+		// public void onProgressChanged(WebView view, int progress) {
+		// setProgress(progress * 100);
+		// }
+		// });
+		//
+		// this.webView.setWebViewClient(new WebViewClient() {
+		// public void onPageFinished(WebView view, String url) {
+		//
+		// }
+		// });
+
 	}
 
 	@Override
@@ -106,7 +126,7 @@ public class LogInActivity extends Activity {
 
 			try {
 				// Log.v("gsearch","gsearch result with AsyncTask");
-				return login(url, parameters);
+				return ServerDbAdapter.connectToServer(url, parameters);
 				// return "SUCCESS";
 				// return downloadImage(url);
 			} catch (Exception e) {
@@ -136,73 +156,6 @@ public class LogInActivity extends Activity {
 
 			}
 
-		}
-
-		public String login(String serverUrl, Hashtable<String, String> params) {
-			try {
-
-				// Log.v("serverUrl", serverUrl);
-				URL url = new URL(serverUrl);
-				HttpURLConnection con = (HttpURLConnection) url
-						.openConnection();
-				con.setDoInput(true);
-				con.setDoOutput(true);
-				con.setUseCaches(false);
-				con.setRequestMethod("POST");
-				con.setRequestProperty("Connection", "Keep-Alive");
-				String postString = "";
-
-				Enumeration<String> keys = params.keys();
-				String key, val;
-				while (keys.hasMoreElements()) {
-					key = keys.nextElement().toString();
-					// Log.v("KEY", key);
-					val = params.get(key);
-					// Log.v("VAL", val);
-					postString += key + "=" + URLEncoder.encode(val, "UTF-8")
-							+ "&";
-				}
-				postString = postString.substring(0, postString.length() - 1);
-				Log.v("postString", postString);
-				con.setRequestProperty("Content-Length",
-						"" + Integer.toString(postString.getBytes().length));
-				con.setRequestProperty("Content-Type",
-						"application/x-www-form-urlencoded");
-				DataOutputStream dos = new DataOutputStream(
-						con.getOutputStream());
-				dos.writeBytes(postString);
-				dos.flush();
-				dos.close();
-				// Responses from the server (code and message)
-				int serverResponseCode = con.getResponseCode();
-				Log.v("CODE", String.valueOf(serverResponseCode));
-				String serverResponseMessage = con.getResponseMessage();
-				Log.v("PAGE", serverResponseMessage);
-
-				BufferedReader rd = new BufferedReader(new InputStreamReader(
-						con.getInputStream()));
-				String line;
-				StringBuffer response = new StringBuffer();
-				while ((line = rd.readLine()) != null) {
-					response.append(line);
-					response.append('\r');
-				}
-				rd.close();
-				String json = response.toString();
-				return json;
-
-			} catch (MalformedURLException me) {
-				Log.v("MalformedURLException", me.toString());
-				return null;
-			} catch (IOException ie) {
-				Log.v("IOException", ie.toString());
-				return null;
-
-			} catch (Exception e) {
-				Log.v("Exception", e.toString());
-				return null;
-				// Log.e("HREQ", "Exception: "+e.toString());
-			}
 		}
 
 	};
