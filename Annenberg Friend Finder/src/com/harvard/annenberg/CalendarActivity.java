@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.WebView;
 
+/*
+ * Displays Annenberg hours.
+ */
 public class CalendarActivity extends Activity {
 
 	public void onCreate(Bundle bunny) {

@@ -9,6 +9,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/*
+ * Database adapter for the Menu.
+ */
 public class MenuDbAdapter {
 
 	public static final String FOOD_DB_TABLE = "food";

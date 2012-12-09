@@ -36,6 +36,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/*
+ * Displays the title page.
+ */
 public class TitlePageActivity extends Activity {
 
 	private DbAdapter db = new DbAdapter(this);

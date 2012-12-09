@@ -1,5 +1,8 @@
 package com.harvard.annenberg;
 
+/*
+ * This is a person!
+ */
 public class Person {
 	String name;
 	int HUID;

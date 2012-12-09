@@ -10,6 +10,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
+/*
+ * Local database adapter... not sure if I still use it.
+ */
 public class DbAdapter {
 
 	public static final String USER_DB_TABLE = "person";
@@ -119,6 +122,9 @@ public class DbAdapter {
 		}
 	}
 
+	/*
+	 * Create a new user with the following params.
+	 */
 	public int createUser(String name, String imageUri, int HUID,
 			String password) {
 

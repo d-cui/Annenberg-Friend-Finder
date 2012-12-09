@@ -20,7 +20,7 @@ if(!$db->open()){
 	else
 	{
 	
-	$sql = "select status as statusNum, time as time, users.table as tableNum from users where huid = '$huid' ";
+	$sql = "select status as statusNum, time as time, users.table as tableNum, users.image as imgUri from users where huid = '$huid' ";
 	$result = $db->sql_query($sql);
 		
 		if ( !$result)    

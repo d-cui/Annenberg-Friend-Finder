@@ -20,10 +20,15 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -31,6 +36,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,6 +48,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView;
 
+/*
+ * User's profile.
+ */
 public class ProfileActivity extends Activity {
 	DbAdapter database;
 	private SharedPreferences prefs;
@@ -61,6 +70,8 @@ public class ProfileActivity extends Activity {
 	private static String sessionId;
 
 	private int tableID;
+
+	private Button checkIn;
 
 	public static final String UPDATE_URL = "http://mgm.funformobile.com/aff/updateIsEating.php";
 	public static final String GET_URL = "http://mgm.funformobile.com/aff/getStatus.php";
@@ -113,14 +124,23 @@ public class ProfileActivity extends Activity {
 		// tableText.setText((table.equals("") ? "N/A" : "" + table));
 
 		// Check in button
-		Button b = (Button) findViewById(R.id.check_in);
-		b.setOnClickListener(new View.OnClickListener() {
+		checkIn = (Button) findViewById(R.id.check_in);
+		checkIn.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-				Intent i = new Intent(ProfileActivity.this,
-						NewAnnenbergActivity.class);
-				i.putExtra("STARTCODE", true);
-				startActivityForResult(i, 0);
+				if (prefs.getBoolean("checkedin", false) == false) {
+					Intent i = new Intent(ProfileActivity.this,
+							NewAnnenbergActivity.class);
+					i.putExtra("STARTCODE", true);
+					startActivityForResult(i, 0);
+				} else {
+					currentSelection = 1;
+					tableID = 0;
+					prefs.edit().putBoolean("checkedin", false).commit();
+					checkIn.setText("Check In");
+					s.setSelection(0);
+					table.setText("N/A");
+				}
 
 			}
 		}
@@ -152,25 +172,33 @@ public class ProfileActivity extends Activity {
 				mImage.setImageBitmap(bmp);
 				myImage = bm;
 
-				UploadTask uploader = new UploadTask(this);
-				uploader.doUpload(prefs.getString("huid", ""), image);
+				doUpload((prefs.getString("huid", "")), image);
 			} else {
 				getStatus();
-//				int tableNum = data.getIntExtra("tableNum", tableID);
-//
-//				String tableString = "" + ((tableNum - 1) % 17 + 1);
-//				if (tableNum > 17 && tableNum <= 34)
-//					tableString += "B";
-//				else if (tableNum > 34)
-//					tableString += "C";
-//				else if (tableNum == 0)
-//					tableString = "N/A";
-//				else
-//					tableString += "A";
-//
-//				table.setText(tableString);
+				// int tableNum = data.getIntExtra("tableNum", tableID);
+				//
+				// String tableString = "" + ((tableNum - 1) % 17 + 1);
+				// if (tableNum > 17 && tableNum <= 34)
+				// tableString += "B";
+				// else if (tableNum > 34)
+				// tableString += "C";
+				// else if (tableNum == 0)
+				// tableString = "N/A";
+				// else
+				// tableString += "A";
+				//
+				// table.setText(tableString);
 			}
 		}
+	}
+
+	public void doUpload(String HUID, Uri imgUri) {
+		if (imgUri == null)
+			return;
+
+		// this.serverId = serverId;
+		UploadTask upl = new UploadTask(this);
+		upl.execute(HUID, imgUri.toString());
 	}
 
 	OnItemSelectedListener statusListener = new OnItemSelectedListener() {
@@ -203,14 +231,6 @@ public class ProfileActivity extends Activity {
 
 	// Fetch list of users
 	public void updateStatus() {
-		mProgressDialog = new ProgressDialog(this);
-		mProgressDialog.setTitle("Updating Status");
-		mProgressDialog.setMessage("Updating Status, Please Wait");
-		mProgressDialog.setIndeterminate(true);
-
-		mProgressDialog.setCancelable(false);
-
-		mProgressDialog.show();
 		parameters = new Hashtable<String, String>();
 
 		parameters.put("huid", prefs.getString("huid", ""));
@@ -220,12 +240,20 @@ public class ProfileActivity extends Activity {
 			parameters.put("eatStatus", "Y");
 		parameters.put("state", String.valueOf(currentSelection));
 
-		UpdateStatusTask upl = new UpdateStatusTask();
+		UpdateStatusTask upl = new UpdateStatusTask(parameters, this);
 		upl.execute(UPDATE_URL);
 
 	}
 
 	public void getStatus() {
+		mProgressDialog = new ProgressDialog(this);
+		mProgressDialog.setTitle("Getting Status");
+		mProgressDialog.setMessage("Getting Status, Please Wait");
+		mProgressDialog.setIndeterminate(true);
+
+		mProgressDialog.setCancelable(false);
+
+		mProgressDialog.show();
 		parameters = new Hashtable<String, String>();
 
 		parameters.put("huid", prefs.getString("huid", ""));
@@ -233,68 +261,6 @@ public class ProfileActivity extends Activity {
 		GetStatusTask upl = new GetStatusTask();
 		upl.execute(GET_URL);
 	}
-
-	private class UpdateStatusTask extends AsyncTask<String, Integer, String> {
-
-		protected String doInBackground(String... searchKey) {
-
-			String url = searchKey[0];
-
-			try {
-				// Log.v("gsearch","gsearch result with AsyncTask");
-				return ServerDbAdapter.connectToServer(url, parameters);
-				// return "SUCCESS";
-				// return downloadImage(url);
-			} catch (Exception e) {
-				// Log.v("Exception google search","Exception:"+e.getMessage());
-				return null;
-
-			}
-		}
-
-		protected void onPostExecute(String result) {
-			try {
-				mProgressDialog.dismiss();
-				showUploadSuccess(result);
-
-			} catch (Exception e) {
-
-			}
-
-		}
-
-		public void showUploadSuccess(String json) {
-			Log.v("JSON", json);
-			if (json == null) {
-				String message = "An network error has occured. Please try again later";
-				showFinalAlert(message);
-				return;
-			}
-			try {
-				JSONObject object = new JSONObject(json);
-				String status = object.getString("status");
-				status = status.trim();
-				Log.v("STATUS", "Status is: " + status);
-				if (status.equals("OK")) {
-
-					Calendar c = Calendar.getInstance();
-					timeOfUpdate = c.getTime().toString().split(" ")[3];
-					String message = "Status updated!";
-					showFinalAlert(message);
-					return;
-
-				} else {
-					Log.v("STATUS", status);
-					String message = status;
-					showFinalAlert(message);
-				}
-			} catch (Exception e) {
-
-			}
-
-		}
-
-	};
 
 	private void showFinalAlert(CharSequence message) {
 		new AlertDialog.Builder(ProfileActivity.this)
@@ -329,6 +295,7 @@ public class ProfileActivity extends Activity {
 
 		protected void onPostExecute(String result) {
 			try {
+				mProgressDialog.dismiss();
 				showUploadSuccess(result);
 			} catch (Exception e) {
 			}
@@ -358,6 +325,16 @@ public class ProfileActivity extends Activity {
 
 					if (prefs.getInt("status", -1) != -1)
 						s.setSelection(prefs.getInt("status", -1));
+
+					if (tableID != 0) {
+						prefs.edit().putBoolean("checkedin", true).commit();
+						checkIn.setText("Check Out");
+						// setAlarm();
+					} else {
+						prefs.edit().putBoolean("checkedin", false).commit();
+						checkIn.setText("Check In");
+					}
+
 					String tableString = "" + ((tableID - 1) % 17 + 1);
 					if (tableID > 17 && tableID <= 34)
 						tableString += "B";

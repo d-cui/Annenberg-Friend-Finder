@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -29,6 +31,9 @@ import android.widget.TextView;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 
+/*
+ * Adapter for friends list.
+ */
 public class FriendListAdapter extends BaseExpandableListAdapter {
 
 	private Context mContext;
@@ -136,7 +141,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 				.get("status"));
 		String status = "";
 
-		if (statusID == 1) {
+		if (statusID <= 1) {
 			status = "Not at Annenberg";
 		} else if (statusID == 2) {
 			status = "In line";
@@ -160,17 +165,24 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 			table += "A";
 		// childHolder.table.setText("Table: " + table + " ");
 		String time = children.get(arg0).get(arg1).get("time");
-		if (time.equals("null")) {
-			time = "None";
-		} else {
-			StringTokenizer st = new StringTokenizer(time);
-			st.nextToken();
-			time = st.nextToken();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		java.util.Date dateOne = null;
+		java.util.Date dateTwo = null;
+		try {
+			dateOne = df.parse(time);
+			dateTwo = Calendar.getInstance().getTime();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		long timeDiff = 0;
+		if (dateOne != null && dateTwo != null)
+			timeDiff = Math.abs(dateOne.getTime() - dateTwo.getTime());
+		int timeElapsed = (int) (timeDiff / 60000);
+		if (status.equals("Eating")) {
+			status = "Table " + table + " for " + timeElapsed + " mins.";
 		}
 
-		if (status.equals("Eating")) {
-			status = "Table " + table + " since " + time;
-		}
 		// childHolder.time.setText("Last check-in: " + time);
 
 		childHolder.status.setText(status);

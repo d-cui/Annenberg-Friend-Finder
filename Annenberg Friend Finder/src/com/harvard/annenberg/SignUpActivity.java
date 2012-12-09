@@ -31,6 +31,9 @@ import android.widget.Toast;
 import android.view.View.OnClickListener;
 import android.widget.*;
 
+/*
+ * Handles signing up.
+ */
 public class SignUpActivity extends Activity {
 
 	public static final String SIGNUP_URL = "http://mgm.funformobile.com/aff/SignUp.php";

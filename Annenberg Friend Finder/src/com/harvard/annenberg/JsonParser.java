@@ -25,6 +25,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+/*
+ * Parses JSON data.
+ */
 public class JsonParser {
 
 	private static MenuDbAdapter db;

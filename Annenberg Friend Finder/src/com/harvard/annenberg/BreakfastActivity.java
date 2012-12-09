@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 
+/*
+ * Displays breakfast menu.
+ */
 public class BreakfastActivity extends ExpandableListActivity {
 
 	private ExpandableListView breakfast;
@@ -46,11 +49,17 @@ public class BreakfastActivity extends ExpandableListActivity {
 		breakfast.setGroupIndicator(null);
 	}
 
+	/*
+	 * Get the menu from the intent.
+	 */
 	@SuppressWarnings("unchecked")
 	private ArrayList<FoodItem> extractMenu() {
 		return (ArrayList<FoodItem>) this.getIntent().getExtras().get("menu");
 	}
 
+	/*
+	 * Listener for breakfast list.
+	 */
 	private OnChildClickListener breakfastListener = new OnChildClickListener() {
 
 		public boolean onChildClick(ExpandableListView parent, View v,
@@ -66,6 +75,9 @@ public class BreakfastActivity extends ExpandableListActivity {
 
 	};
 
+	/*
+	 * Generate group list.
+	 */
 	private ArrayList<HashMap<String, String>> createGroupList() {
 		ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
 		for (int i = 0; i < categories.size(); i++) {
@@ -76,6 +88,9 @@ public class BreakfastActivity extends ExpandableListActivity {
 		return result;
 	}
 
+	/*
+	 * Generate child list.
+	 */
 	private ArrayList<ArrayList<HashMap<String, String>>> createChildList() {
 		ArrayList<ArrayList<HashMap<String, String>>> result = new ArrayList<ArrayList<HashMap<String, String>>>();
 		for (int i = 0; i < orderedMenu.size(); i++) {
@@ -92,6 +107,9 @@ public class BreakfastActivity extends ExpandableListActivity {
 		return result;
 	}
 
+	/*
+	 * Reorder the menu
+	 */
 	private ArrayList<ArrayList<FoodItem>> reorganizeMenu() {
 		ArrayList<ArrayList<FoodItem>> newMenu = new ArrayList<ArrayList<FoodItem>>();
 

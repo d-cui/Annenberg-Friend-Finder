@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 
+/*
+ * Displays brunch menu.
+ */
 public class BrunchActivity extends ExpandableListActivity {
 
 	private ExpandableListView brunch;

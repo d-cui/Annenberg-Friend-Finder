@@ -27,6 +27,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
 
+/*
+ * Handles log in information.
+ */
 public class LogInActivity extends Activity {
 	private SharedPreferences prefs;
 
@@ -144,11 +147,6 @@ public class LogInActivity extends Activity {
 				// displayImage(resultbm);
 				mProgressDialog.dismiss();
 				showUploadSuccess(result);
-
-				Intent i = new Intent(LogInActivity.this,
-						FriendFinderTabHost.class);
-				startActivity(i);
-				finish();
 				// Log.v("Ringtone","Ringtone Path:"+resultbm);
 
 			} catch (Exception e) {
@@ -196,10 +194,14 @@ public class LogInActivity extends Activity {
 
 				Toast.makeText(this, "You have successfully logged in.",
 						Toast.LENGTH_LONG).show();
+
+				Intent i = new Intent(LogInActivity.this,
+						FriendFinderTabHost.class);
+				startActivity(i);
 				finish();
 			} else {
 				Log.v("STATUS", status);
-				String message = status;
+				String message = "Invalid HUID or password.";
 				showFinalAlert(message);
 			}
 		} catch (Exception e) {

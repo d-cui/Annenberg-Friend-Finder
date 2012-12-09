@@ -26,6 +26,9 @@ import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
+/*
+ * Shows a list of everyone in Annenberg... not used anymore.
+ */
 public class EveryoneListActivity extends Activity {
 	private ProgressDialog mProgressDialog;
 	private Hashtable<String, String> parameters;

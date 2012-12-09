@@ -14,6 +14,9 @@ import android.widget.TextView;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 
+/*
+ * Adapter for the menu.
+ */
 public class MenuAdapter extends BaseExpandableListAdapter {
 
 	private Context mContext;

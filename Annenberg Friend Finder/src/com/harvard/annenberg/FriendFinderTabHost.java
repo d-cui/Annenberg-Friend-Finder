@@ -27,6 +27,9 @@ import android.widget.TabHost;
 import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 
+/*
+ * Tab host for the friend finder
+ */
 public class FriendFinderTabHost extends TabActivity {
 
 	private SharedPreferences prefs;
@@ -60,12 +63,12 @@ public class FriendFinderTabHost extends TabActivity {
 		friendSpec.setContent(friendIntent);
 
 		// Tab for everyone list
-		TabSpec everyoneSpec = tabHost.newTabSpec("Everyone");
-		everyoneSpec.setIndicator("Everyone",
-				getResources().getDrawable(R.drawable.everyone));
-		Intent everyoneIntent = new Intent(this, EveryoneListActivity.class);
-		everyoneIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		everyoneSpec.setContent(everyoneIntent);
+		// TabSpec everyoneSpec = tabHost.newTabSpec("Everyone");
+		// everyoneSpec.setIndicator("Everyone",
+		// getResources().getDrawable(R.drawable.everyone));
+		// Intent everyoneIntent = new Intent(this, EveryoneListActivity.class);
+		// everyoneIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		// everyoneSpec.setContent(everyoneIntent);
 
 		// Tab for annenberg
 		TabSpec annenbergSpec = tabHost.newTabSpec("Annenberg");
@@ -78,7 +81,7 @@ public class FriendFinderTabHost extends TabActivity {
 
 		tabHost.addTab(profileSpec);
 		tabHost.addTab(friendSpec);
-		tabHost.addTab(everyoneSpec);
+		// tabHost.addTab(everyoneSpec);
 		tabHost.addTab(annenbergSpec);
 	}
 

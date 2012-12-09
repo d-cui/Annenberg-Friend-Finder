@@ -27,6 +27,9 @@ import android.widget.TabHost;
 import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 
+/*
+ * TabHost for the menu.
+ */
 public class MenuTabHost extends TabActivity {
 
 	private ArrayList<ArrayList<FoodItem>> menu;

@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 
+/*
+ * Displays lunch menu.
+ */
 public class LunchActivity extends ExpandableListActivity {
 
 	private ExpandableListView lunch;

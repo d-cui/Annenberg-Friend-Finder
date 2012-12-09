@@ -22,10 +22,10 @@ if(!$db->open()){
 		if($add == 'Y')
 		{
 			$addsql = "INSERT into friends (user, friend, mutual)";
-			$addsql .= " VALUES ('$user', '$friend', '1')";
+			$addsql .= " VALUES ('$user', '$friend', '1') ON DUPLICATE KEY UPDATE mutual = 1";
 			$addresult = $db->sql_query($addsql);
 			
-			$updatesql = "UPDATE friends set mutual = '1' where user = '$friend' and 			friend = '$user'";
+			$updatesql = "UPDATE friends set mutual = '1' where user = '$friend' and friend = '$user'";
 			$updateresult = $db->sql_query($updatesql);
 			
 			if($updateresult)
@@ -40,6 +40,8 @@ if(!$db->open()){
 		else
 		{
 			$removesql = "DELETE from friends where user = '$friend' and friend = '$user'";
+			$removeresult = $db->sql_query($removesql);
+			$removesql = "DELETE from friends where user = '$user' and friend = '$friend'";
 			$removeresult = $db->sql_query($removesql);
 			
 			if($removeresult)

@@ -13,6 +13,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/*
+ * Adapter for the people in Annenberg.
+ */
 public class PersonAdapter extends ArrayAdapter {
 	ArrayList<Person> people;
 
@@ -39,7 +42,7 @@ public class PersonAdapter extends ArrayAdapter {
 		((TextView) view.findViewById(R.id.person_status)).setText("Status: "
 				+ status + " ");
 		int tableID = Integer.parseInt(people.get(position).getTable());
-		String table = "" + ((tableID-1)%17+1);
+		String table = "" + ((tableID - 1) % 17 + 1);
 		if (tableID > 17 && tableID <= 34)
 			table += "B";
 		else if (tableID > 34)
@@ -48,20 +51,18 @@ public class PersonAdapter extends ArrayAdapter {
 			table = "N/A";
 		else
 			table += "A";
-//		((TextView) view.findViewById(R.id.person_table)).setText("Table: "
-//				+ table + " ");
+		// ((TextView) view.findViewById(R.id.person_table)).setText("Table: "
+		// + table + " ");
 		String time = people.get(position).getTime();
-		if(time.equals("null")){
+		if (time.equals("null")) {
 			time = "None";
-		}
-		else
-		{
+		} else {
 			StringTokenizer st = new StringTokenizer(time);
 			st.nextToken();
 			time = st.nextToken();
 		}
-//		((TextView) view.findViewById(R.id.person_time))
-//				.setText("Last check-in: " + time);
+		// ((TextView) view.findViewById(R.id.person_time))
+		// .setText("Last check-in: " + time);
 		ImageView i = ((ImageView) view.findViewById(R.id.person_image));
 		String image = people.get(position).getImg();
 		if (image.equals("") == false) {

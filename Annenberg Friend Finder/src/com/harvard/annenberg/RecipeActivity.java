@@ -17,6 +17,9 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/*
+ * Displays data for a food item.
+ */
 public class RecipeActivity extends Activity {
 
 	private boolean isVegetarian = false;

@@ -16,6 +16,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+/*
+ * Fetches recipe data.
+ */
 public class FetchRecipe extends AsyncTask<String, Integer, String> {
 
 	private ProgressDialog mProgressDialog;
@@ -54,12 +57,8 @@ public class FetchRecipe extends AsyncTask<String, Integer, String> {
 		String recipe = searchKey[0];
 
 		try {
-			// Log.v("gsearch","gsearch result with AsyncTask");
-			Log.v("Create", "Create successfully executed.");
 			return getRecipeInfo(recipe);
-			// return downloadImage(url);
 		} catch (Exception e) {
-			// Log.v("Exception google search","Exception:"+e.getMessage());
 			return null;
 
 		}

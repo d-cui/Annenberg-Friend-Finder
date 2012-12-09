@@ -13,6 +13,9 @@ import java.util.Hashtable;
 
 import android.util.Log;
 
+/*
+ * Allows Native app to interface with server using POST request.
+ */
 public class ServerDbAdapter {
 
 	public static String connectToServer(String serverUrl,

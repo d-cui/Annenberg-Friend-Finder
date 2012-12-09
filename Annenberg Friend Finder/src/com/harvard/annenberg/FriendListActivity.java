@@ -44,6 +44,9 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 
+/*
+ * Displays list of friends
+ */
 public class FriendListActivity extends Activity {
 	private FriendListAdapter fla;
 	private ExpandableListView expListView;
@@ -72,7 +75,6 @@ public class FriendListActivity extends Activity {
 
 		// TODO: Server call, update requests + friends
 		fetchFriends(prefs.getString("huid", ""));
-		fetchReq(prefs.getString("huid", ""));
 		expListView = (ExpandableListView) findViewById(android.R.id.list);
 		expListView.setOnChildClickListener(reqListener);
 		expListView.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -306,8 +308,8 @@ public class FriendListActivity extends Activity {
 			try {
 				// displayMsg();
 				// displayImage(resultbm);
-				mProgressDialog.dismiss();
 				showUploadSuccess(result);
+				fetchReq(prefs.getString("huid", ""));
 				// Log.v("Ringtone","Ringtone Path:"+resultbm);
 
 			} catch (Exception e) {
@@ -385,7 +387,8 @@ public class FriendListActivity extends Activity {
 			// Toast.LENGTH_LONG).show();
 			try {
 				// displayMsg();
-				// displayImage(resultbm);
+				// displayImage(resultbm)
+				mProgressDialog.dismiss();
 				showUploadSuccess(result);
 				groups = getGroups();
 				children = getChilds();
