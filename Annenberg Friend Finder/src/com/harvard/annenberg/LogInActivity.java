@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
+import android.webkit.SslErrorHandler;
+import android.net.http.SslError;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -34,7 +36,7 @@ public class LogInActivity extends Activity {
 	private SharedPreferences prefs;
 
 	public static final String LOGIN_URL = "http://mgm.funformobile.com/aff/SignIn.php";
-	public static final String LOGIN_URL2 = "http://mgm.funformobile.com/aff/login.php";
+	public static final String LOGIN_URL2 = "https://www.funformobile.com/aff/login.php";
 
 	private Hashtable<String, String> parameters;
 	private ProgressDialog mProgressDialog;
@@ -44,57 +46,111 @@ public class LogInActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		requestWindowFeature(Window.FEATURE_PROGRESS);
 		prefs = getSharedPreferences("AFF", MODE_PRIVATE);
-		setContentView(R.layout.log_in);
-
-		TextView loginTitle = (TextView) findViewById(R.id.loginTitle);
-		loginTitle.setText("Log In");
-		Button logInButton = (Button) findViewById(R.id.login_go);
-		logInButton.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				int HUID = Integer
-						.parseInt(((EditText) findViewById(R.id.login_HUID))
-								.getText().toString());
-				String enteredPassword = ((EditText) findViewById(R.id.login_password))
-						.getText().toString();
-
-				doLogIn(String.valueOf(HUID), enteredPassword);
-			}
-		});
-
-		Button signUpButton = (Button) findViewById(R.id.signup);
-		signUpButton.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				Intent i = new Intent(LogInActivity.this, SignUpActivity.class);
-				startActivity(i);
-				finish();
-			}
-		});
-
-		// this.webView = new WebView(this);
-		// this.webView.clearCache(true); // !!!
-		// setContentView(this.webView);
+		// setContentView(R.layout.log_in);
 		//
-		// this.webView.loadUrl(LOGIN_URL2);
-		// this.webView.getSettings().setJavaScriptEnabled(true);
-		// this.webView.setWebChromeClient(new WebChromeClient() {
-		// // Show loading progress in activity's title bar.
-		// @Override
-		// public void onProgressChanged(WebView view, int progress) {
-		// setProgress(progress * 100);
+		// TextView loginTitle = (TextView) findViewById(R.id.loginTitle);
+		// loginTitle.setText("Log In");
+		// Button logInButton = (Button) findViewById(R.id.login_go);
+		// logInButton.setOnClickListener(new OnClickListener() {
+		//
+		// public void onClick(View v) {
+		// int HUID = Integer
+		// .parseInt(((EditText) findViewById(R.id.login_HUID))
+		// .getText().toString());
+		// String enteredPassword = ((EditText)
+		// findViewById(R.id.login_password))
+		// .getText().toString();
+		//
+		// doLogIn(String.valueOf(HUID), enteredPassword);
 		// }
 		// });
 		//
-		// this.webView.setWebViewClient(new WebViewClient() {
-		// public void onPageFinished(WebView view, String url) {
+		// Button signUpButton = (Button) findViewById(R.id.signup);
+		// signUpButton.setOnClickListener(new OnClickListener() {
 		//
+		// public void onClick(View v) {
+		// Intent i = new Intent(LogInActivity.this, SignUpActivity.class);
+		// startActivity(i);
+		// finish();
 		// }
 		// });
 
+		this.webView = new WebView(this);
+		this.webView.clearCache(true); // !!!
+		setContentView(this.webView);
+
+		this.webView.loadUrl(LOGIN_URL2);
+		this.webView.getSettings().setJavaScriptEnabled(true);
+		this.webView.setWebChromeClient(new WebChromeClient() {
+			// Show loading progress in activity's title bar.
+			@Override
+			public void onProgressChanged(WebView view, int progress) {
+				setProgress(progress * 100);
+			}
+		});
+
+		this.webView.setWebViewClient(new WebViewClient() {
+			public void onPageFinished(WebView view, String url) {
+				Log.v("Finished URL", url);
+
+				if (url.contains("http://mgm.funformobile.com/logged_in.php?")) {
+					int identityStart = url.indexOf("identity=")
+							+ "identity=".length();
+					int identityEnd = identityStart + 84;
+					String identity = url.substring(identityStart, identityEnd);
+
+					int nameStart = url.indexOf("fullname=")
+							+ "fullname=".length();
+					String name = url.substring(nameStart);
+					name = name.replace("%20", " ");
+					prefs.edit().putString("huid", identity).commit();
+					prefs.edit().putString("n", name).commit();
+					prefs.edit().putBoolean("login", true).commit();
+
+					Intent profileIntent = new Intent(LogInActivity.this,
+							FriendFinderTabHost.class);
+					startActivity(profileIntent);
+
+					Toast.makeText(LogInActivity.this,
+							"You have successfully logged in.",
+							Toast.LENGTH_LONG).show();
+
+					finish();
+
+				} else if (url
+						.equals("http://mgm.funformobile.com/log_in_failed.php")) {
+					Intent failIntent = new Intent(LogInActivity.this,
+							TitlePageActivity.class);
+					startActivity(failIntent);
+
+					Toast.makeText(
+							LogInActivity.this,
+							"Unable to log in. Please check your network connection and try again later.",
+							Toast.LENGTH_LONG).show();
+					finish();
+
+				}
+			}
+
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				Log.v("Redirect URL", url);
+				if (url.equals("http://mgm.funformobile.com/log_in_failed.php")
+						|| url.contains("http://mgm.funformobile.com/logged_in.php?"))
+					return true;
+
+				webView.loadUrl(url);
+				return true;
+			}
+
+			public void onReceivedSslError(WebView view,
+					SslErrorHandler handler, SslError error) {
+
+				handler.proceed();
+
+			}
+		});
 	}
 
 	@Override

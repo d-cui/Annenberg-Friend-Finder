@@ -104,22 +104,8 @@ public class FriendListActivity extends Activity {
 
 			public void onClick(View v) {
 				EditText e = (EditText) findViewById(R.id.add_friend_huid);
-				int friendHUID = 0;
-				try {
-					if (e.getText().toString().length() != 8) {
-						showAlert("Please enter valid HUID");
-						return;
-					}
-					friendHUID = Integer.parseInt(e.getText().toString());
-				} catch (NumberFormatException nfe) {
-					showAlert("Please enter valid HUID");
-					return;
-				}
 
-				if (friendHUID != 0) {
-					addFriend(prefs.getString("huid", ""),
-							String.valueOf(friendHUID));
-				}
+				addFriend(prefs.getString("huid", ""), e.getText().toString());
 				// TODO: addFriend based on friendHUID
 			}
 		});
@@ -210,7 +196,7 @@ public class FriendListActivity extends Activity {
 		ArrayList<HashMap<String, String>> friendChildren = new ArrayList<HashMap<String, String>>();
 		for (Person f : friends) {
 			HashMap<String, String> h = new HashMap<String, String>();
-			h.put("HUID", f.getHUID() + "");
+			h.put("HUID", f.getHUID());
 			h.put("name", f.getName());
 			h.put("img", f.getImg());
 			h.put("status", f.getStatus());
@@ -347,15 +333,12 @@ public class FriendListActivity extends Activity {
 							image = "";
 						String name = user.getString("name");
 
-						Person person = new Person(Integer.valueOf(HUID), name,
-								image, state, table, time);
+						Person person = new Person(HUID, name, image, state,
+								table, time);
 
 						friends.add(person);
 					}
 				} else {
-					Log.v("STATUS", status);
-					String message = status;
-					showFinalAlert(message);
 				}
 			} catch (Exception e) {
 
@@ -438,9 +421,6 @@ public class FriendListActivity extends Activity {
 					}
 
 				} else {
-					Log.v("STATUS", status);
-					String message = status;
-					showFinalAlert(message);
 				}
 			} catch (Exception e) {
 

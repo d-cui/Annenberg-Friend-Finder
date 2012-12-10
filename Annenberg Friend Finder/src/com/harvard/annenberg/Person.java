@@ -5,13 +5,13 @@ package com.harvard.annenberg;
  */
 public class Person {
 	String name;
-	int HUID;
+	String HUID;
 	String img;
 	String status;
 	String table;
 	String time;
 
-	public Person(int HUID, String name, String img, String status,
+	public Person(String HUID, String name, String img, String status,
 			String table, String time) {
 		super();
 		this.HUID = HUID;
@@ -22,7 +22,7 @@ public class Person {
 		this.time = time;
 	}
 
-	public int getHUID() {
+	public String getHUID() {
 		return HUID;
 	}
 
@@ -48,7 +48,7 @@ public class Person {
 
 	public boolean equals(Object o) {
 		Person person = (Person) o;
-		return this.getHUID() == person.getHUID();
+		return this.getHUID().equals(person.getHUID());
 	}
 
 }

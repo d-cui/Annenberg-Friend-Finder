@@ -205,7 +205,7 @@ public class EveryoneListActivity extends Activity {
 					JSONObject user = list.getJSONObject(i);
 
 					String time = user.getString("time");
-					int HUID = user.getInt("huid");
+					String HUID = user.getString("huid");
 					String state = user.getString("state");
 					String table = user.getString("tableNum");
 					String image = user.getString("imageUri");

@@ -13,11 +13,13 @@
         android:background="#FF000000"
         android:baselineAligned="false"
         android:gravity="center_vertical"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:weightSum="3" >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:paddingLeft="10dp"
             android:text="Add Friend"
             android:textColor="#FFFFFFFF" />
@@ -26,17 +28,17 @@
             android:id="@+id/add_friend_huid"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:ems="10"
-            android:hint="Enter HUID"
-            android:inputType="number" >
-
-            <requestFocus />
+            android:hint="Harvard Email"
+            android:inputType="textEmailAddress" >
         </EditText>
 
         <ImageView
             android:id="@+id/add_new_friend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:paddingBottom="5dp"
             android:paddingLeft="20dp"
             android:paddingTop="5dp"

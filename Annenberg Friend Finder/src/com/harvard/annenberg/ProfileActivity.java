@@ -86,13 +86,15 @@ public class ProfileActivity extends Activity {
 		TextView name = (TextView) findViewById(R.id.profile_name);
 		name.setText(prefs.getString("n", ""));
 		table = (TextView) findViewById(R.id.profile_table);
-		TextView huid = (TextView) findViewById(R.id.profile_HUID);
-		huid.setText(prefs.getString("huid", ""));
+		// TextView huid = (TextView) findViewById(R.id.profile_HUID);
+		// huid.setText(prefs.getString("huid", ""));
 
 		mImage = (ImageView) findViewById(R.id.profile_image);
 
+		String huid = prefs.getString("huid", "").trim();
+		int urlData = huid.lastIndexOf("/");
 		String aURL = "http://mgm.funformobile.com/aff/img/"
-				+ prefs.getString("huid", "").trim() + ".jpg";
+				+ huid.substring(urlData + 1) + ".jpg";
 
 		ImageDownloader imgDownloader = new ImageDownloader();
 		imgDownloader.execute(aURL);
@@ -173,7 +175,7 @@ public class ProfileActivity extends Activity {
 				myImage = bm;
 
 				doUpload((prefs.getString("huid", "")), image);
-			} else {
+			} else if (requestCode == 0) {
 				getStatus();
 				// int tableNum = data.getIntExtra("tableNum", tableID);
 				//
@@ -197,8 +199,9 @@ public class ProfileActivity extends Activity {
 			return;
 
 		// this.serverId = serverId;
+		int urlData = HUID.lastIndexOf("/");
 		UploadTask upl = new UploadTask(this);
-		upl.execute(HUID, imgUri.toString());
+		upl.execute(HUID.substring(urlData + 1), imgUri.toString());
 	}
 
 	OnItemSelectedListener statusListener = new OnItemSelectedListener() {
@@ -240,7 +243,7 @@ public class ProfileActivity extends Activity {
 			parameters.put("eatStatus", "Y");
 		parameters.put("state", String.valueOf(currentSelection));
 
-		UpdateStatusTask upl = new UpdateStatusTask(parameters, this);
+		UpdateStatusTask upl = new UpdateStatusTask(parameters);
 		upl.execute(UPDATE_URL);
 
 	}

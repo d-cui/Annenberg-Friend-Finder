@@ -25,79 +25,87 @@
         </activity>
         <activity
             android:name=".AnnenbergActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_log_in" >
+            android:label="@string/title_activity_log_in"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".NewAnnenbergActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_log_in" >
+            android:label="@string/title_activity_log_in"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".BreakfastActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_log_in" >
+            android:label="@string/title_activity_log_in"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".BrunchActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_log_in" >
+            android:label="@string/title_activity_log_in"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".DinnerActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_log_in" >
+            android:label="@string/title_activity_log_in"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".EveryoneListActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_log_in" >
+            android:label="@string/title_activity_log_in"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".FriendFinderTabHost"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_log_in" >
+            android:label="@string/title_activity_log_in"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".FriendListActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_log_in" >
+            android:label="@string/title_activity_log_in"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".LogInActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_log_in" >
+            android:label="@string/title_activity_log_in"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".LunchActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_log_in" >
+            android:label="@string/title_activity_log_in"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".MenuTabHost"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_log_in" >
+            android:label="@string/title_activity_log_in"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ProfileActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_log_in" >
+            android:label="@string/title_activity_log_in"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".SignUpActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_log_in" >
+            android:label="@string/title_activity_log_in"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".RecipeActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_log_in" >
+            android:label="@string/title_activity_log_in"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".CalendarActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_log_in" >
+            android:label="@string/title_activity_log_in"
+            android:screenOrientation="portrait" >
         </activity>
+
+        <receiver
+            android:name=".CheckOutReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="CheckOutAlarm" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -114,8 +114,8 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 			// }
 
 			childHolder.name.setText(children.get(arg0).get(arg1).get("name"));
-			childHolder.HUID.setText("HUID: "
-					+ children.get(arg0).get(arg1).get("HUID"));
+			// childHolder.HUID.setText("HUID: "
+			// + children.get(arg0).get(arg1).get("HUID"));
 
 			imgDownloader.execute(children.get(arg0).get(arg1).get("HUID"),
 					childHolder.img, (Integer) arg0, (Integer) arg1);
@@ -278,6 +278,8 @@ public class FriendListAdapter extends BaseExpandableListAdapter {
 		protected byte[] doInBackground(Object... searchKey) {
 
 			HUID = (String) searchKey[0];
+
+			HUID = HUID.substring(HUID.lastIndexOf("/") + 1);
 			view = (ImageView) searchKey[1];
 			groupPos = (Integer) searchKey[2];
 			childPos = (Integer) searchKey[3];
