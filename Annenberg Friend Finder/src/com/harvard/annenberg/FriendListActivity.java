@@ -278,11 +278,15 @@ public class FriendListActivity extends Activity {
 
 			try {
 				// Log.v("gsearch","gsearch result with AsyncTask");
-				return ServerDbAdapter.connectToServer(url, parameters);
+				return ServerDbAdapter.connectToServer(this, url, parameters);
 				// return "SUCCESS";
 				// return downloadImage(url);
 			} catch (Exception e) {
-				// Log.v("Exception google search","Exception:"+e.getMessage());
+				if (mProgressDialog.isShowing())
+					mProgressDialog.dismiss();
+				String message = "An network error has occured. Please try again later";
+				Toast.makeText(FriendListActivity.this, message,
+						Toast.LENGTH_SHORT);
 				return null;
 
 			}
@@ -355,11 +359,15 @@ public class FriendListActivity extends Activity {
 
 			try {
 				// Log.v("gsearch","gsearch result with AsyncTask");
-				return ServerDbAdapter.connectToServer(url, parameters);
+				return ServerDbAdapter.connectToServer(this, url, parameters);
 				// return "SUCCESS";
 				// return downloadImage(url);
 			} catch (Exception e) {
-				// Log.v("Exception google search","Exception:"+e.getMessage());
+				if (mProgressDialog.isShowing())
+					mProgressDialog.dismiss();
+				String message = "An network error has occured. Please try again later";
+				Toast.makeText(FriendListActivity.this, message,
+						Toast.LENGTH_SHORT);
 				return null;
 
 			}
@@ -437,11 +445,15 @@ public class FriendListActivity extends Activity {
 
 			try {
 				// Log.v("gsearch","gsearch result with AsyncTask");
-				return ServerDbAdapter.connectToServer(url, parameters);
+				return ServerDbAdapter.connectToServer(this, url, parameters);
 				// return "SUCCESS";
 				// return downloadImage(url);
 			} catch (Exception e) {
-				// Log.v("Exception google search","Exception:"+e.getMessage());
+				if (mProgressDialog.isShowing())
+					mProgressDialog.dismiss();
+				String message = "An network error has occured. Please try again later";
+				Toast.makeText(FriendListActivity.this, message,
+						Toast.LENGTH_SHORT);
 				return null;
 
 			}
@@ -501,11 +513,15 @@ public class FriendListActivity extends Activity {
 
 			try {
 				// Log.v("gsearch","gsearch result with AsyncTask");
-				return ServerDbAdapter.connectToServer(url, parameters);
+				return ServerDbAdapter.connectToServer(this, url, parameters);
 				// return "SUCCESS";
 				// return downloadImage(url);
 			} catch (Exception e) {
-				// Log.v("Exception google search","Exception:"+e.getMessage());
+				if (mProgressDialog.isShowing())
+					mProgressDialog.dismiss();
+				String message = "An network error has occured. Please try again later";
+				Toast.makeText(FriendListActivity.this, message,
+						Toast.LENGTH_SHORT);
 				return null;
 
 			}

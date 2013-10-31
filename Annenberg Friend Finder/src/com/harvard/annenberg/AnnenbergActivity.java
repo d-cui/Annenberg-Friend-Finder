@@ -124,8 +124,8 @@ public class AnnenbergActivity extends Activity {
 					}
 					if (Math.abs(beginTapX - curX) < 10
 							&& Math.abs(beginTapY - curY) < 10) {
-						
-						//They tapped a table!
+
+						// They tapped a table!
 						int absoluteX = (int) (topLeftX + curX);
 						int absoluteY = (int) (topLeftY + curY);
 						if (absoluteX > imgWidth || absoluteY > imgHeight) {
@@ -247,7 +247,7 @@ public class AnnenbergActivity extends Activity {
 			String url = searchKey[0];
 
 			try {
-				return ServerDbAdapter.connectToServer(url, parameters);
+				return ServerDbAdapter.connectToServer(this, url, parameters);
 			} catch (Exception e) {
 				return null;
 
@@ -332,7 +332,7 @@ public class AnnenbergActivity extends Activity {
 
 			try {
 				// Log.v("gsearch","gsearch result with AsyncTask");
-				return ServerDbAdapter.connectToServer(url, parameters);
+				return ServerDbAdapter.connectToServer(this, url, parameters);
 				// return "SUCCESS";
 				// return downloadImage(url);
 			} catch (Exception e) {

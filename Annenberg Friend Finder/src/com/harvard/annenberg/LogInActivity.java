@@ -185,7 +185,7 @@ public class LogInActivity extends Activity {
 
 			try {
 				// Log.v("gsearch","gsearch result with AsyncTask");
-				return ServerDbAdapter.connectToServer(url, parameters);
+				return ServerDbAdapter.connectToServer(this, url, parameters);
 				// return "SUCCESS";
 				// return downloadImage(url);
 			} catch (Exception e) {

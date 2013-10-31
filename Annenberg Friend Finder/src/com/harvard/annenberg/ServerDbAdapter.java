@@ -10,17 +10,20 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Timer;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 /*
  * Allows Native app to interface with server using POST request.
  */
 public class ServerDbAdapter {
+	private static Timer timer;
 
-	public static String connectToServer(String serverUrl,
+	public static String connectToServer(AsyncTask task, String serverUrl,
 			Hashtable<String, String> params) {
-
+		timer = new Timer();
 		try {
 
 			// Log.v("serverUrl", serverUrl);
@@ -65,7 +68,12 @@ public class ServerDbAdapter {
 			while ((line = rd.readLine()) != null) {
 				response.append(line);
 				response.append('\r');
+				timer.cancel();
+				timer = new Timer();
+				timer.schedule(new Timeout(task), 1000 * 10);
+				Log.v("Timeout", "Timeout set");
 			}
+			timer.cancel();
 			rd.close();
 			String json = response.toString();
 			return json;
